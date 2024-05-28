@@ -1,50 +1,135 @@
 <template>
-    <div class="case-files">
-      <h1>Case Files</h1>
-      <ul>
-        <li v-for="caseFile in caseFiles" :key="caseFile.id">
-          <h2>{{ caseFile.title }}</h2>
-          <p>{{ caseFile.summary }}</p>
-          <router-link :to="'/case-files/' + caseFile.id">Read more</router-link>
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'CaseFiles',
-    data() {
-      return {
-        caseFiles: [],
-      };
+  <div class="case-files">
+    <h1>Case Files</h1>
+    <form @submit.prevent="addCaseFile">
+      <div>
+        <label for="title">Title:</label>
+        <input type="text" v-model="newCase.title" id="title" required />
+      </div>
+      <div>
+        <label for="summary">Summary:</label>
+        <textarea v-model="newCase.summary" id="summary" required></textarea>
+      </div>
+      <div>
+        <label for="details">Details:</label>
+        <textarea v-model="newCase.details" id="details" required></textarea>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" v-model="newCase.password" id="password" required />
+      </div>
+      <button type="submit">{{ editingCase ? 'Update' : 'Add' }} Case File</button>
+    </form>
+    <ul>
+      <li v-for="caseFile in caseFiles" :key="caseFile.id">
+        <h2>{{ caseFile.title }}</h2>
+        <p>{{ caseFile.summary }}</p>
+        <div>
+          <input type="password" v-model="caseFile.enteredPassword" placeholder="Enter password to view details" />
+          <button @click="unlockDetails(caseFile)">Unlock Details</button>
+          <p v-if="caseFile.detailsVisible">{{ caseFile.details }}</p>
+        </div>
+        <button @click="editCaseFile(caseFile)">Edit</button>
+        <button @click="deleteCaseFile(caseFile.id)">Delete</button>
+        <router-link :to="'/case-files/' + caseFile.id">Read more</router-link>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import { getDatabase, ref, push, onValue, update, remove } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import Config from '../config';
+
+export default {
+  name: 'CaseFiles',
+  data() {
+    return {
+      caseFiles: [],
+      newCase: {
+        title: '',
+        summary: '',
+        details: '',
+        password: ''
+      },
+      editingCase: null
+    };
+  },
+  created() {
+    // Initialize Firebase
+    this.app = initializeApp(Config.firebaseConfig);
+    this.db = getDatabase(this.app);
+
+    // Fetch case files from Firebase
+    const caseFilesRef = ref(this.db, 'caseFiles');
+    onValue(caseFilesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        this.caseFiles = Object.keys(data).map(key => ({ id: key, ...data[key], enteredPassword: '', detailsVisible: false }));
+      } else {
+        this.caseFiles = [];
+      }
+    });
+  },
+  methods: {
+    addCaseFile() {
+      const caseFilesRef = ref(this.db, 'caseFiles');
+      if (this.editingCase) {
+        const caseRef = ref(this.db, 'caseFiles/' + this.editingCase.id);
+        update(caseRef, this.newCase)
+          .then(() => {
+            this.newCase = { title: '', summary: '', details: '', password: '' };
+            this.editingCase = null;
+          })
+          .catch(error => console.error('Error updating case:', error));
+      } else {
+        push(caseFilesRef, this.newCase)
+          .then(() => {
+            this.newCase = { title: '', summary: '', details: '', password: '' };
+          })
+          .catch(error => console.error('Error adding case:', error));
+      }
     },
-    mounted() {
-      // Fetch case files from the backend
-      fetch('/api/cases')
-        .then(response => response.json())
-        .then(data => {
-          this.caseFiles = data;
-        })
-        .catch(error => console.error('Error fetching cases:', error));
+    editCaseFile(caseFile) {
+      this.newCase = { title: caseFile.title, summary: caseFile.summary, details: caseFile.details, password: caseFile.password };
+      this.editingCase = caseFile;
     },
-  };
-  </script>
-  
-  <style scoped>
-  .case-files {
-    max-width: 800px;
-    margin: 50px auto;
+    deleteCaseFile(id) {
+      const caseRef = ref(this.db, 'caseFiles/' + id);
+      remove(caseRef)
+        .catch(error => console.error('Error deleting case:', error));
+    },
+    unlockDetails(caseFile) {
+      if (caseFile.enteredPassword === caseFile.password) {
+        caseFile.detailsVisible = true;
+      } else {
+        alert('Incorrect password');
+      }
+    }
   }
-  .case-files ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  .case-files li {
-    margin: 20px 0;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.case-files {
+  max-width: 800px;
+  margin: 50px auto;
+}
+.case-files ul {
+  list-style-type: none;
+  padding: 0;
+}
+.case-files li {
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+form {
+  margin-bottom: 20px;
+}
+form div {
+  margin-bottom: 10px;
+}
+</style>

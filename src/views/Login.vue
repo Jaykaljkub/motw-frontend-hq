@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ message }}</h1>
-    <div v-if="!isLoggedIn">
+    <div v-if="!store.isAuthenticated">
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
       <div>
         <label for="email">Email:</label>
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div v-else>
-      <p>Welcome, {{ userName }}!</p>
+      <p>Welcome, {{ store.userName }}!</p>
       <button @click="logoutUser">Logout</button>
     </div>
   </div>
@@ -42,7 +42,8 @@ import {
   onAuthStateChanged
 } from "firebase/auth";
 import { getDatabase, ref, child, get, set } from "firebase/database";
-import Config from '../config'
+import Config from '../config';
+import { store } from '../scripts/store';
 
 export default {
   data() {
@@ -51,8 +52,6 @@ export default {
       email: '',
       password: '',
       name: '',
-      isLoggedIn: false,
-      userName: '',
       showRegister: false,
       errorMessage: ''
     }
@@ -62,25 +61,13 @@ export default {
     this.app = initializeApp(Config.firebaseConfig);
     this.auth = getAuth(this.app);
 
-    const dbRef = ref(getDatabase(this.app));
-    get(child(dbRef, `profiles/`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-
     // Check authentication state
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.isLoggedIn = true;
+        store.login({ uid: user.uid });
         this.fetchUserName(user.uid);
       } else {
-        this.isLoggedIn = false;
-        this.userName = '';
+        store.logout();
       }
     });
   },
@@ -105,10 +92,7 @@ export default {
           };
           const db = getDatabase();
           set(ref(db, 'profiles/' + user.uid), profileData);
-
-          console.log("Created!");
-          this.isLoggedIn = true;
-          this.userName = this.name;
+          store.login({ uid: user.uid, name: this.name });
           this.errorMessage = '';
         })
         .catch((error) => {
@@ -118,11 +102,10 @@ export default {
     loginUser() {
       setPersistence(this.auth, browserLocalPersistence)
         .then(() => {
-          return signInWithEmailAndPassword(this.auth, this.email, this.password)
+          return signInWithEmailAndPassword(this.auth, this.email, this.password);
         })
         .then((userCredential) => {
-          console.log('Logged in');
-          this.isLoggedIn = true;
+          store.login({ uid: userCredential.user.uid });
           this.fetchUserName(userCredential.user.uid);
           this.errorMessage = '';
         })
@@ -132,9 +115,7 @@ export default {
     },
     logoutUser() {
       signOut(this.auth).then(() => {
-        console.log("Signed Out!");
-        this.isLoggedIn = false;
-        this.userName = '';
+        store.logout();
       }).catch((error) => {
         console.error(error);
       });
@@ -144,13 +125,18 @@ export default {
       const userRef = ref(db, 'profiles/' + uid);
       get(userRef).then((snapshot) => {
         if (snapshot.exists()) {
-          this.userName = snapshot.val().name;
+          store.user.name = snapshot.val().name;
         } else {
           console.log("No user data available");
         }
       }).catch((error) => {
         console.error(error);
       });
+    }
+  },
+  computed: {
+    store() {
+      return store;
     }
   }
 }

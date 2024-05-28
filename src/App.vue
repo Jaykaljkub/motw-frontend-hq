@@ -4,13 +4,14 @@
       <nav>
         <ul>
           <li><router-link to="/">Home</router-link></li>
-          <!-- <li><router-link to="/dashboard">Dashboard</router-link></li> -->
+          <li><router-link to="/dashboard">Dashboard</router-link></li>
           <li><router-link to="/case-files">Case Files</router-link></li>
           <li><router-link to="/knowledge-base">Knowledge Base</router-link></li>
           <li><router-link to="/acquisitions">Acquisitions</router-link></li>
-          <li><router-link to="/inventory">Inventory</router-link></li>
-          <li><router-link to="/profile">Profile</router-link></li>
-          <li><router-link to="/login">Login</router-link></li>
+          <li v-if="store.isAuthenticated"><router-link to="/inventory">Inventory</router-link></li>
+          <li v-if="store.isAuthenticated"><router-link to="/profile">Profile</router-link></li>
+          <li v-if="!store.isAuthenticated"><router-link to="/login">Login</router-link></li>
+          <li v-if="store.isAuthenticated"><a href="#" @click="logout">Logout</a></li>
         </ul>
       </nav>
     </header>
@@ -24,8 +25,25 @@
 </template>
 
 <script>
+import { store } from './scripts/store';
+import { signOut, getAuth } from "firebase/auth";
+
 export default {
   name: 'App',
+  setup() {
+    return { store };
+  },
+  methods: {
+    logout() {
+      store.logout();
+      this.$router.push('/');
+      signOut(getAuth(this.app)).then(() => {
+        store.logout();
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+  }
 };
 </script>
 
