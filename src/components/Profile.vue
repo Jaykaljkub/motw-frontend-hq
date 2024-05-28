@@ -1,89 +1,115 @@
 <template>
-    <div class="profile">
-      <h1>Profile</h1>
-      <form @submit.prevent="updateProfile">
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" v-model="user.username" id="username" disabled />
-        </div>
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" v-model="user.email" id="email" />
-        </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" v-model="password" id="password" placeholder="New password" />
-        </div>
-        <button type="submit">Update Profile</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'Profile',
-    data() {
-      return {
-        user: {
-          username: '',
-          email: '',
-        },
-        password: '',
-      };
-    },
-    mounted() {
-      // Fetch user profile from the backend
-      fetch('/api/profile')
-        .then(response => response.json())
-        .then(data => {
-          this.user = data;
-        })
-        .catch(error => console.error('Error fetching profile:', error));
-    },
-    methods: {
-      updateProfile() {
-        // Update user profile logic here
-        const updatedData = {
-          email: this.user.email,
-          password: this.password,
-        };
-        fetch('/api/profile', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedData),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Profile updated:', data);
-            alert('Profile updated successfully');
-          })
-          .catch(error => console.error('Error updating profile:', error));
+  <div class="profile">
+    <h1>Hunter Profile</h1>
+    <form @submit.prevent="saveProfile">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" v-model="profile.name" id="name" required />
+      </div>
+      <div>
+        <label for="age">Age:</label>
+        <input type="number" v-model="profile.age" id="age" required />
+      </div>
+      <div>
+        <label for="background">Background:</label>
+        <textarea v-model="profile.background" id="background" required></textarea>
+      </div>
+      <div>
+        <label for="playbook">Playbook:</label>
+        <select v-model="profile.playbook" id="playbook" @change="selectPlaybook">
+          <option v-for="playbook in playbooks" :key="playbook.name" :value="playbook.name">{{ playbook.name }}</option>
+        </select>
+      </div>
+      <div v-if="selectedPlaybook">
+        <h2>{{ selectedPlaybook.name }}</h2>
+        <p>{{ selectedPlaybook.description }}</p>
+        <h3>Moves:</h3>
+        <ul>
+          <li v-for="move in selectedPlaybook.moves" :key="move">{{ move }}</li>
+        </ul>
+        <h3>Gear:</h3>
+        <ul>
+          <li v-for="gearItem in selectedPlaybook.gear" :key="gearItem">{{ gearItem }}</li>
+        </ul>
+        <h3>Ratings:</h3>
+        <ul>
+          <li v-for="rating in selectedPlaybook.ratings" :key="rating">{{ rating }}</li>
+        </ul>
+        <h3>Special:</h3>
+        <p>{{ selectedPlaybook.special }}</p>
+      </div>
+      <button type="submit">Save Profile</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, get } from "firebase/database";
+import Config from '../config';
+import { playbooks } from '../scripts/playbooks';
+import { store } from '../scripts/store';
+
+export default {
+  name: 'Profile',
+  data() {
+    return {
+      profile: {
+        name: '',
+        age: '',
+        background: '',
+        playbook: ''
       },
+      playbooks,
+      selectedPlaybook: null,
+      db: null,
+      userId: localStorage.getItem('motw-uid')// Replace with actual user ID
+    };
+  },
+  created() {
+    this.app = initializeApp(Config.firebaseConfig);
+    this.db = getDatabase(this.app);
+    this.fetchProfile();
+  },
+  methods: {
+    fetchProfile() {
+      const profileRef = ref(this.db, 'profiles/' + this.userId);
+      get(profileRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          this.profile = snapshot.val();
+          this.selectPlaybook();
+        } else {
+          console.log("No profile data available");
+        }
+      }).catch((error) => {
+        console.error('Error fetching profile:', error);
+      });
     },
-  };
-  </script>
-  
-  <style scoped>
-  .profile {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    saveProfile() {
+      const profileRef = ref(this.db, 'profiles/' + this.userId);
+      set(profileRef, this.profile).catch(error => {
+        console.error('Error saving profile:', error);
+      });
+    },
+    selectPlaybook() {
+      this.selectedPlaybook = this.playbooks.find(playbook => playbook.name === this.profile.playbook);
+    }
   }
-  .profile form div {
-    margin-bottom: 15px;
-  }
-  .profile label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  .profile input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.profile {
+  max-width: 600px;
+  margin: 50px auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+form {
+  margin-bottom: 20px;
+}
+form div {
+  margin-bottom: 10px;
+}
+</style>

@@ -108,6 +108,8 @@ export default {
           store.login({ uid: userCredential.user.uid });
           this.fetchUserName(userCredential.user.uid);
           this.errorMessage = '';
+          localStorage.setItem('motw-uid',userCredential.user.uid);
+          localStorage.setItem('motw-user',JSON.stringify(userCredential.user));
         })
         .catch((error) => {
           this.errorMessage = error.message;
@@ -116,6 +118,8 @@ export default {
     logoutUser() {
       signOut(this.auth).then(() => {
         store.logout();
+        localStorage.removeItem('motw-uid');
+        localStorage.removeItem('motw-user');
       }).catch((error) => {
         console.error(error);
       });
