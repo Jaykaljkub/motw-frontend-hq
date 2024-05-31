@@ -21,7 +21,7 @@
       <button type="submit">{{ editingCase ? 'Update' : 'Add' }} Case File</button>
     </form>
     <ul>
-      <li v-for="caseFile in caseFiles" :key="caseFile.id">
+      <li class="casefile-item" v-for="caseFile in caseFiles" :key="caseFile.id">
         <h2>{{ caseFile.title }}</h2>
         <p>{{ caseFile.summary }}</p>
         <div>
@@ -115,21 +115,69 @@ export default {
 .case-files {
   max-width: 800px;
   margin: 50px auto;
-}
-.case-files ul {
-  list-style-type: none;
-  padding: 0;
-}
-.case-files li {
-  margin: 20px 0;
-  border: 1px solid #ccc;
   padding: 20px;
+  background-color: #f5f5dc;
+  border: 1px solid #ccc;
   border-radius: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2, h3 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
 form {
   margin-bottom: 20px;
 }
-form div {
+.form-group {
+  margin-bottom: 15px;
+}
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  font-family: 'Courier New', Courier, monospace;
+}
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+button:hover {
+  background-color: #555;
+}
+.playbook-details {
+  margin-top: 20px;
+}
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+li {
+  background-color: #fff;
   margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>

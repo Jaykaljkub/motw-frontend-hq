@@ -17,7 +17,7 @@
           <button type="submit">Upload Image</button>
         </form>
       </div>
-      
+
       <div class="notes">
         <h2>Notes</h2>
         <ul>
@@ -35,7 +35,7 @@
       <div class="clues">
         <h2>Clues</h2>
         <ul>
-          <li v-for="clue in caseFile.clues" :key="clue.id">
+          <li class="clue-item" v-for="clue in caseFile.clues" :key="clue.id">
             <p>{{ clue.summary }}</p>
             <input type="password" v-model="clue.enteredPassword" placeholder="Enter password to view clue" />
             <button @click="unlockClue(clue)">Unlock Clue</button>

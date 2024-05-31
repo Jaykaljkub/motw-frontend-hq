@@ -24,7 +24,7 @@
       </div>
     </div>
     <div v-else>
-      <p>Welcome, {{ store.userName }}!</p>
+      <p>Welcome, {{ store.user.name }}!</p>
       <button @click="logoutUser">Logout</button>
     </div>
   </div>
@@ -125,6 +125,7 @@ export default {
       });
     },
     fetchUserName(uid) {
+      console.log(128, 'Fetch username');
       const db = getDatabase();
       const userRef = ref(db, 'profiles/' + uid);
       get(userRef).then((snapshot) => {
