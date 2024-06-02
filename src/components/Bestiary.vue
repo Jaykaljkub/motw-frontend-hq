@@ -1,147 +1,181 @@
 <template>
-    <div class="bestiary">
-      <div class="header">
-        <h1>HOLHACUIND</h1>
+  <div class="bestiary">
+    <div class="header">
+      <h1>Bestiary</h1>
+    </div>
+    <div class="content">
+      <div v-if="isAdmin">
+        <edit-beast :beastToEdit="beastToEdit" @saved="fetchBeasts" />
       </div>
-      <div class="content">
-        <div class="main-display">
-          <img src="" alt="Whale">
-          <div class="stats">
-            <div class="stat">388%</div>
-            <div class="stat">121: 4%</div>
-          </div>
-        </div>
-        <div class="charts">
-          <div class="chart">
-            <h2>Chart 1</h2>
-            <div class="chart-content"></div>
-          </div>
-          <div class="chart">
-            <h2>Chart 2</h2>
-            <div class="chart-content"></div>
-          </div>
-          <div class="chart">
-            <h2>Chart 3</h2>
-            <div class="chart-content"></div>
-          </div>
-          <div class="chart">
-            <h2>Chart 4</h2>
-            <div class="chart-content"></div>
-          </div>
-        </div>
-        <div class="footer">
-          <div class="footer-stat">911%</div>
-          <div class="footer-stat">94.77</div>
-          <div class="footer-stat">50%</div>
-          <div class="footer-stat">29%</div>
-        </div>
+
+      <div v-if="beasts.length">
+        <h2>Beasts</h2>
+        <ul>
+          <li v-for="beast in beasts" :key="beast.id" class="beast-item">
+            <div v-if="!beast.entryVisible">
+              <input v-model="beast.entryPasswordInput" type="password" placeholder="Enter password to view beast">
+              <button @click="unlockEntry(beast)">Unlock Beast</button>
+            </div>
+            <div v-if="beast.entryVisible">
+              <h3>{{ beast.name }}</h3>
+              <img :src="beast.image" :alt="beast.name">
+              <p>{{ beast.description }}</p>
+              <div v-if="beast.details && !beast.detailsVisible">
+                <input v-model="beast.detailsPasswordInput" type="password" placeholder="Enter password to view details">
+                <button @click="unlockDetails(beast)">Unlock Details</button>
+              </div>
+              <div v-if="beast.detailsVisible">
+                <p>Details: {{ beast.details }}</p>
+              </div>
+              <p>Stats: {{ beast.stats }}</p>
+              <div v-if="isAdmin">
+                <button @click="editBeast(beast)">Edit</button>
+                <button @click="deleteBeast(beast.id)">Delete</button>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'Bestiary',
-  };
-  </script>
-  
-  <style scoped>
-  .bestiary {
-    background-color: #1a1a2e;
-    color: #00d4ff;
-    font-family: 'Arial', sans-serif;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+  </div>
+</template>
+
+<script>
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, get, remove } from "firebase/database";
+import Config from '../config';
+import EditBeast from './EditBeast.vue';
+import { store } from '../scripts/store';
+
+export default {
+  name: 'Bestiary',
+  components: {
+    EditBeast
+  },
+  data() {
+    return {
+      beasts: [],
+      beastToEdit: null,
+      db: null,
+      isAdmin: store.isAdmin // Replace with actual admin check
+    };
+  },
+  created() {
+    this.app = initializeApp(Config.firebaseConfig);
+    this.db = getDatabase(this.app);
+    this.fetchBeasts();
+    this.checkAdmin(); // Implement this method based on your auth logic
+  },
+  methods: {
+    fetchBeasts() {
+      const beastsRef = ref(this.db, 'bestiary');
+      get(beastsRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          this.beasts = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key],
+            detailsVisible: false,
+            entryVisible: !data[key].entryPassword,
+            entryPasswordInput: '',
+            detailsPasswordInput: ''
+          }));
+        }
+      }).catch((error) => {
+        console.error('Error fetching beasts:', error);
+      });
+    },
+    editBeast(beast) {
+      this.beastToEdit = { ...beast };
+    },
+    deleteBeast(id) {
+      const beastRef = ref(this.db, 'bestiary/' + id);
+      remove(beastRef).then(() => {
+        this.fetchBeasts();
+      }).catch((error) => {
+        console.error('Error deleting beast:', error);
+      });
+    },
+    checkAdmin() {
+      console.log('Admin check', store.isAdmin);
+      this.isAdmin = store.isAdmin; // Replace this with actual admin check logic
+    },
+    unlockEntry(beast) {
+      if (beast.entryPasswordInput === beast.entryPassword || !beast.entryPassword) {
+        beast.entryVisible = true;
+      } else {
+        alert('Incorrect password!');
+      }
+    },
+    unlockDetails(beast) {
+      if (beast.detailsPasswordInput === beast.detailsPassword || !beast.detailsPassword) {
+        beast.detailsVisible = true;
+      } else {
+        alert('Incorrect password!');
+      }
+    }
   }
-  
-  .header {
-    margin-bottom: 20px;
-  }
-  
-  .header h1 {
-    font-size: 36px;
-    color: #00d4ff;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .main-display {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    margin-bottom: 20px;
-  }
-  
-  .main-display img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  
-  .stats {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .stat {
-    font-size: 24px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
-  
-  .charts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .chart {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    border-radius: 10px;
-    flex: 1 1 40%;
-    max-width: 45%;
-    min-width: 300px;
-  }
-  
-  .chart h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #00d4ff;
-  }
-  
-  .chart-content {
-    height: 100px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-  }
-  
-  .footer {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .footer-stat {
-    font-size: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 20px;
-    border-radius: 5px;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
+.bestiary {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #1A1F2A;
+  border: 1px solid #BDA567;
+  border-radius: 8px;
+  font-family: 'Major Mono Display', monospace;
+  color: #BDA567;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+h1, h2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: #BDA567;
+}
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+li.beast-item {
+  background-color: #1A1F2A;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #BDA567;
+  border-radius: 4px;
+  font-family: 'Major Mono Display', monospace;
+}
+img {
+  max-width: 100%;
+  margin: 0px;
+  border-radius: 8px;
+}
+button {
+  background-color: #BDA567;
+  color: #1A1F2A;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+button:hover {
+  background-color: #F8E5AB;
+}
+input[type="password"] {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #BDA567;
+  background-color: #1A1F2A;
+  color: #BDA567;
+  font-family: 'Major Mono Display', monospace;
+  margin-right: 10px;
+}
+</style>

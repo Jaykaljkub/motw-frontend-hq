@@ -1,24 +1,19 @@
 <template>
   <div id="app">
-    <header>
-      <nav>
-        <ul>
-          <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/dashboard">Dashboard</router-link></li>
-          <li><router-link to="/bestiary">Bestiary</router-link></li>
-          <li><router-link to="/case-files">Case Files</router-link></li>
-          <li v-if="store.isAuthenticated"><router-link to="/profile">Profile</router-link></li>
-          <li v-if="!store.isAuthenticated"><router-link to="/login">Login</router-link></li>
-          <li v-if="store.isAuthenticated"><a href="#" @click="logout">Logout</a></li>
-        </ul>
-      </nav>
-    </header>
+    <nav>
+      <ul>
+        <li><router-link to="/">Home</router-link></li>
+        <li v-if="store.isAuthenticated"><router-link to="/dashboard">Dashboard</router-link></li>
+        <li v-if="store.isAuthenticated"><router-link to="/bestiary">Bestiary</router-link></li>
+        <li v-if="store.isAuthenticated"><router-link to="/case-files">Case Files</router-link></li>
+        <li v-if="store.isAuthenticated"><router-link to="/profile">Profile</router-link></li>
+        <li v-if="!store.isAuthenticated"><router-link to="/login">Login</router-link></li>
+        <li v-if="store.isAuthenticated"><a href="#" @click="logout">Logout</a></li>
+      </ul>
+    </nav>
     <main>
       <router-view />
     </main>
-    <footer>
-      <p>&copy; 2024 Monster of the Week Portal</p>
-    </footer>
   </div>
 </template>
 
@@ -45,17 +40,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 #app {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  font-family: 'Major Mono Display', sans-serif;
+  color: #BDA567;
+  width: 100%;
+  background: #1A1F2A;
+  min-height: 100vh;
 }
 
-header {
-  background-color: #35495e;
+nav {
+  background: #1A1F2A;
   padding: 20px;
+  width: 200px;
+  min-height: 100vh;
+  border-right: 1px solid #BDA567;
+  /* box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); */
 }
 
 nav ul {
@@ -64,30 +67,30 @@ nav ul {
 }
 
 nav li {
-  display: inline;
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 nav a {
-  color: #fff;
+  color: #BDA567;
   text-decoration: none;
+  font-weight: bold;
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-nav a.router-link-exact-active {
-  font-weight: bold;
+nav a.router-link-exact-active, nav a:hover {
+  background-color: #BDA567;
+  color: #0c0c0c;
 }
 
 main {
+  flex-grow: 1;
   padding: 20px;
-}
-
-footer {
-  background-color: #35495e;
-  color: #fff;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
+  background: #1A1F2A;
+  border-left: 1px solid #BDA567;
+  /* box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.3); */
+  min-height: 100vh;
 }
 </style>

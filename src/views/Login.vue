@@ -88,11 +88,12 @@ export default {
           const profileData = {
             name: this.name,
             email: this.email,
+            isAdmin: false,
             last_login: Date.now()
           };
           const db = getDatabase();
           set(ref(db, 'profiles/' + user.uid), profileData);
-          store.login({ uid: user.uid, name: this.name });
+          store.login({ uid: user.uid, name: this.name, isAdmin: user.isAdmin });
           this.errorMessage = '';
         })
         .catch((error) => {
@@ -131,6 +132,7 @@ export default {
       get(userRef).then((snapshot) => {
         if (snapshot.exists()) {
           store.user.name = snapshot.val().name;
+          store.isAdmin = snapshot.val().isAdmin;
         } else {
           console.log("No user data available");
         }
@@ -151,5 +153,22 @@ export default {
 /* Add your styles here */
 .error {
   color: red;
+}
+button {
+  background-color: #BDA567;
+  color: #1A1F2A;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+a:-webkit-any-link {
+    color: #BDA567;
+  }
+a:-webkit-any-link:hover {
+  color: #F8E5AB;
 }
 </style>

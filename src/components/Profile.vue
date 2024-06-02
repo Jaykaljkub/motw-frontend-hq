@@ -52,7 +52,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get } from "firebase/database";
 import Config from '../config';
 import { playbooks } from '../scripts/playbooks';
-import { store } from '../scripts/store';// Ensure this file includes the correct structure
+import { store } from '../scripts/store';
 
 export default {
   name: 'Profile',
@@ -67,7 +67,7 @@ export default {
       playbooks,
       selectedPlaybook: null,
       db: null,
-      userId: localStorage.getItem('motw-uid')// Replace with actual user ID
+      userId: localStorage.getItem('motw-uid')
     };
   },
   created() {
@@ -103,21 +103,24 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 .profile {
   max-width: 800px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #f5f5dc;
-  border: 1px solid #ccc;
+  background-color: #1A1F2A;
+  border: 1px solid #BDA567;
   border-radius: 8px;
-  font-family: 'Courier New', Courier, monospace;
-  color: #333;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Major Mono Display', monospace;
+  color: #BDA567;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 h1, h2, h3 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
+  color: #BDA567;
 }
 form {
   margin-bottom: 20px;
@@ -129,6 +132,7 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #BDA567;
 }
 input[type="text"],
 input[type="number"],
@@ -136,25 +140,27 @@ textarea,
 select {
   width: 100%;
   padding: 8px;
-  border: 1px solid #aaa;
+  border: 1px solid #BDA567;
   border-radius: 4px;
-  background-color: #f0f0f0;
-  font-family: 'Courier New', Courier, monospace;
+  background-color: #1a1a1a;
+  color: #BDA567;
+  font-family: 'Major Mono Display', monospace;
 }
 button {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #333;
-  color: #fff;
+  background-color: #BDA567;
+  color: #1A1F2A;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   text-transform: uppercase;
+  transition: background-color 0.3s ease;
 }
 button:hover {
-  background-color: #555;
+  background-color: #F8E5AB;
 }
 .playbook-details {
   margin-top: 20px;
@@ -164,11 +170,11 @@ ul {
   padding-left: 0;
 }
 li {
-  background-color: #fff;
+  background-color: #1A1F2A;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #BDA567;
   border-radius: 4px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Major Mono Display', monospace;
 }
 </style>

@@ -1,3 +1,6 @@
+html {
+  background: linear-gradient(135deg, #0c0c0c, #1a1a1a);
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -15,13 +18,18 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #BDA567;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #F8E5AB;
 }
-
+a:visited {
+  color: #BDA567;
+}
+a:-webkit-any-link {
+  color: #BDA567;
+}
 body {
   margin: 0;
   display: flex;
@@ -30,28 +38,51 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: #BDA567;
 }
-
-button {
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+li.beast-item {
+  background-color: #1A1F2A;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #BDA567;
+  border-radius: 4px;
+  font-family: 'Major Mono Display', monospace;
+}
+img {
+  max-width: 100%;
+  margin: 0px;
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+}
+button {
+  background-color: #BDA567;
+  color: #1A1F2A;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #F8E5AB;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+input[type="password"] {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #BDA567;
+  background-color: #1A1F2A;
+  color: #BDA567;
+  font-family: 'Major Mono Display', monospace;
+  margin-right: 10px;
 }
 
 .card {

@@ -1,40 +1,60 @@
 <template>
   <div class="dashboard">
     <div class="header">
-      <div class="avatar">
-        <img src="" alt="Avatar">
-      </div>
       <h1 class="title">Dashboard</h1>
     </div>
     <ul class="menu">
       <li><router-link to="/case-files">Case Files</router-link></li>
       <li><router-link to="/bestiary">Bestiary</router-link></li>
-      <li><router-link to="/acquisitions">Acquisitions</router-link></li>
       <li><router-link to="/profile">Profile</router-link></li>
     </ul>
+    <main>
+      <div class="dashboard-sections">
+        <div class="dashboard-section">
+          <case-files></case-files>
+        </div>
+        <div class="dashboard-section">
+          <bestiary></bestiary>
+        </div>
+        <div class="dashboard-section">
+          <profile></profile>
+        </div>
+      </div>
+    </main>
     <div class="footer">
-      <p>&copy; 2024 Your Company</p>
+      <p>&copy; 2024 The Night Watch</p>
     </div>
   </div>
 </template>
 
 <script>
+import CaseFiles from '../components/CaseFiles.vue';
+import Bestiary from '../components/Bestiary.vue';
+import Profile from '../components/Profile.vue';
+
 export default {
   name: 'Dashboard',
+  components: {
+    CaseFiles,
+    Bestiary,
+    Profile
+  }
 };
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 .dashboard {
-  background-color: #1e1e2f;
-  color: #e0e0e0;
-  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 50px auto;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
-  margin: 0 auto;
-  text-align: center;
+  background-color: #1A1F2A;
+  border: 1px solid #BDA567;
+  border-radius: 8px;
+  font-family: 'Major Mono Display', monospace;
+  color: #BDA567;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
 .header {
@@ -44,49 +64,55 @@ export default {
   margin-bottom: 20px;
 }
 
-.avatar {
-  border: 2px solid #e0e0e0;
-  border-radius: 50%;
-  overflow: hidden;
-  width: 80px;
-  height: 80px;
-  margin-right: 15px;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-}
-
 .title {
-  font-size: 24px;
-  color: #ffd700;
+  font-size: 36px;
+  text-transform: uppercase;
+  color: #BDA567;
 }
 
 .menu {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 20px 0;
+  text-align: center;
 }
 
 .menu li {
-  margin: 10px 0;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 .menu li a {
   text-decoration: none;
-  color: #ffd700;
+  color: #BDA567;
   font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
-.menu li a:hover {
-  color: #fff;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+.menu li a.router-link-exact-active, .menu li a:hover {
+  background-color: #BDA567;
+  color: #1A1F2A;
+}
+
+.dashboard-sections {
+  margin-top: 20px;
+}
+
+.dashboard-section {
+  background-color: #1A1F2A;
+  margin-bottom: 10px;
+  padding: 20px;
+  border: 1px solid #BDA567;
+  border-radius: 4px;
 }
 
 .footer {
   margin-top: 30px;
   font-size: 14px;
   color: #888;
+  text-align: center;
 }
 </style>

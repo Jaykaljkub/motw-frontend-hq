@@ -1,25 +1,9 @@
 <template>
   <div class="case-files">
     <h1>Case Files</h1>
-    <form @submit.prevent="addCaseFile">
-      <div>
-        <label for="title">Title:</label>
-        <input type="text" v-model="newCase.title" id="title" required />
-      </div>
-      <div>
-        <label for="summary">Summary:</label>
-        <textarea v-model="newCase.summary" id="summary" required></textarea>
-      </div>
-      <div>
-        <label for="details">Details:</label>
-        <textarea v-model="newCase.details" id="details" required></textarea>
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="newCase.password" id="password" required />
-      </div>
-      <button type="submit">{{ editingCase ? 'Update' : 'Add' }} Case File</button>
-    </form>
+    <div v-if="isAdmin">
+      <edit-case-files :caseToEdit="caseToEdit" @saved="fetchCaseFiles" />
+    </div>
     <ul>
       <li class="casefile-item" v-for="caseFile in caseFiles" :key="caseFile.id">
         <h2>{{ caseFile.title }}</h2>
@@ -29,76 +13,64 @@
           <button @click="unlockDetails(caseFile)">Unlock Details</button>
           <p v-if="caseFile.detailsVisible">{{ caseFile.details }}</p>
         </div>
-        <button @click="editCaseFile(caseFile)">Edit</button>
-        <button @click="deleteCaseFile(caseFile.id)">Delete</button>
-        <router-link :to="'/case-files/' + caseFile.id">Read more</router-link>
+        <div v-if="isAdmin">
+          <button @click="editCaseFile(caseFile)">Edit</button>
+          <button @click="deleteCaseFile(caseFile.id)">Delete</button>
+        </div>
+        <router-link v-if="caseFile.detailsVisible" :to="'/case-files/' + caseFile.id">Read more</router-link>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, push, onValue, update, remove } from "firebase/database";
+import { getDatabase, ref, onValue, remove } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import Config from '../config';
+import EditCaseFiles from './EditCaseFiles.vue';
+import { store } from '../scripts/store';
 
 export default {
   name: 'CaseFiles',
+  components: {
+    EditCaseFiles
+  },
   data() {
     return {
       caseFiles: [],
-      newCase: {
-        title: '',
-        summary: '',
-        details: '',
-        password: ''
-      },
-      editingCase: null
+      caseToEdit: null,
+      db: null,
+      isAdmin: store.isAdmin // Use store to determine if the user is an admin
     };
   },
   created() {
-    // Initialize Firebase
     this.app = initializeApp(Config.firebaseConfig);
     this.db = getDatabase(this.app);
-
-    // Fetch case files from Firebase
-    const caseFilesRef = ref(this.db, 'caseFiles');
-    onValue(caseFilesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        this.caseFiles = Object.keys(data).map(key => ({ id: key, ...data[key], enteredPassword: '', detailsVisible: false }));
-      } else {
-        this.caseFiles = [];
-      }
-    });
+    this.fetchCaseFiles();
   },
   methods: {
-    addCaseFile() {
+    fetchCaseFiles() {
       const caseFilesRef = ref(this.db, 'caseFiles');
-      if (this.editingCase) {
-        const caseRef = ref(this.db, 'caseFiles/' + this.editingCase.id);
-        update(caseRef, this.newCase)
-          .then(() => {
-            this.newCase = { title: '', summary: '', details: '', password: '' };
-            this.editingCase = null;
-          })
-          .catch(error => console.error('Error updating case:', error));
-      } else {
-        push(caseFilesRef, this.newCase)
-          .then(() => {
-            this.newCase = { title: '', summary: '', details: '', password: '' };
-          })
-          .catch(error => console.error('Error adding case:', error));
-      }
+      onValue(caseFilesRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          this.caseFiles = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key],
+            enteredPassword: '',
+            detailsVisible: false
+          }));
+        } else {
+          this.caseFiles = [];
+        }
+      });
     },
     editCaseFile(caseFile) {
-      this.newCase = { title: caseFile.title, summary: caseFile.summary, details: caseFile.details, password: caseFile.password };
-      this.editingCase = caseFile;
+      this.caseToEdit = { ...caseFile };
     },
     deleteCaseFile(id) {
       const caseRef = ref(this.db, 'caseFiles/' + id);
-      remove(caseRef)
-        .catch(error => console.error('Error deleting case:', error));
+      remove(caseRef).catch(error => console.error('Error deleting case:', error));
     },
     unlockDetails(caseFile) {
       if (caseFile.enteredPassword === caseFile.password) {
@@ -112,72 +84,80 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 .case-files {
   max-width: 800px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #f5f5dc;
-  border: 1px solid #ccc;
+  background-color: #1A1F2A;
+  border: 1px solid #BDA567;
   border-radius: 8px;
-  font-family: 'Courier New', Courier, monospace;
-  color: #333;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Major Mono Display', monospace;
+  color: #BDA567;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
-h1, h2, h3 {
+
+h1, h2 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
+  color: #BDA567;
 }
-form {
-  margin-bottom: 20px;
-}
-.form-group {
-  margin-bottom: 15px;
-}
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-input[type="text"],
-input[type="number"],
-textarea,
-select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background-color: #f0f0f0;
-  font-family: 'Courier New', Courier, monospace;
-}
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-button:hover {
-  background-color: #555;
-}
-.playbook-details {
-  margin-top: 20px;
-}
+
 ul {
   list-style-type: none;
   padding-left: 0;
 }
-li {
-  background-color: #fff;
+
+li.casefile-item {
+  background-color: #1A1F2A;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #BDA567;
   border-radius: 4px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Major Mono Display', monospace;
+}
+
+button {
+  background-color: #BDA567;
+  color: #1A1F2A;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #F8E5AB;
+}
+
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #BDA567;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #BDA567;
+  font-family: 'Major Mono Display', monospace;
+  margin-bottom: 10px;
+}
+a:-webkit-any-link {
+    color: #BDA567;
+  }
+a:-webkit-any-link:hover {
+  color: #F8E5AB;
+}
+
+router-link {
+  color: #BDA567;
+  text-decoration: none;
+}
+
+router-link:hover {
+  text-decoration: underline;
 }
 </style>
