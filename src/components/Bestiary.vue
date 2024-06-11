@@ -173,7 +173,7 @@ input[type="password"] {
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #BDA567;
-  background-color: #1A1F2A;
+  background-color: #1a1a1a;
   color: #BDA567;
   font-family: 'Major Mono Display', monospace;
   margin-right: 10px;

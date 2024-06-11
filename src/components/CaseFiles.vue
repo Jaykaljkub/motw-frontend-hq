@@ -29,6 +29,7 @@ import { initializeApp } from "firebase/app";
 import Config from '../config';
 import EditCaseFiles from './EditCaseFiles.vue';
 import { store } from '../scripts/store';
+import {removeClean} from '../scripts/removeClean';
 
 export default {
   name: 'CaseFiles',
@@ -39,7 +40,6 @@ export default {
     return {
       caseFiles: [],
       caseToEdit: null,
-      db: null,
       isAdmin: store.isAdmin // Use store to determine if the user is an admin
     };
   },
@@ -50,27 +50,38 @@ export default {
   },
   methods: {
     fetchCaseFiles() {
-      const caseFilesRef = ref(this.db, 'caseFiles');
-      onValue(caseFilesRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          this.caseFiles = Object.keys(data).map(key => ({
-            id: key,
-            ...data[key],
-            enteredPassword: '',
-            detailsVisible: false
-          }));
-        } else {
-          this.caseFiles = [];
+    var caseFilesRef = ref(this.db, 'caseFiles');
+    onValue(caseFilesRef, (snapshot) => {
+      var data = snapshot.val();
+      console.log('Fetched data:', data); // Log fetched data
+      if (data) {
+        let caseFilesArray = [];
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            caseFilesArray.push({
+              id: key,
+              ...data[key],
+              enteredPassword: '',
+              detailsVisible: false
+            });
+          }
         }
-      });
-    },
+        console.log('Processed caseFilesArray:', caseFilesArray); // Log processed data
+        this.caseFiles = caseFilesArray;
+      } else {
+        this.caseFiles = [];
+      }
+      console.log('Updated caseFiles:', this.caseFiles); // Log final state update
+    }, error => {
+      console.error('Error fetching case files:', error);
+    });
+  },
     editCaseFile(caseFile) {
       this.caseToEdit = { ...caseFile };
     },
     deleteCaseFile(id) {
-      const caseRef = ref(this.db, 'caseFiles/' + id);
-      remove(caseRef).catch(error => console.error('Error deleting case:', error));
+      var caseRef = ref(this.db, 'caseFiles/' + id);
+      removeClean(caseRef).catch(error => console.error('Error deleting case:', error));
     },
     unlockDetails(caseFile) {
       if (caseFile.enteredPassword === caseFile.password) {
@@ -136,7 +147,7 @@ button:hover {
 }
 
 input[type="password"] {
-  width: 100%;
+  width: 95%;
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;
@@ -145,9 +156,11 @@ input[type="password"] {
   font-family: 'Major Mono Display', monospace;
   margin-bottom: 10px;
 }
+
 a:-webkit-any-link {
     color: #BDA567;
-  }
+}
+
 a:-webkit-any-link:hover {
   color: #F8E5AB;
 }

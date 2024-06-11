@@ -21,20 +21,6 @@
       </form>
     </div>
     
-    <div class="notes">
-      <h2>Notes</h2>
-      <ul>
-        <li v-for="note in caseFile.notes" :key="note.timestamp">
-          {{ note.content }} ({{ new Date(note.timestamp).toLocaleString() }})
-        </li>
-      </ul>
-      <form @submit.prevent="addNote">
-        <label for="note">Add Note:</label>
-        <textarea v-model="newNote" id="note" required></textarea>
-        <button type="submit">Add Note</button>
-      </form>
-    </div>
-
     <div class="clues">
       <h2>Clues</h2>
       <ul>
@@ -58,6 +44,20 @@
         </form>
       </div>
     </div>
+    
+    <div class="notes">
+      <h2>Notes</h2>
+      <ul>
+        <li v-for="note in caseFile.notes" :key="note.timestamp">
+          {{ note.content }} ({{ new Date(note.timestamp).toLocaleString() }})
+        </li>
+      </ul>
+      <form @submit.prevent="addNote">
+        <label for="note">Add Note:</label>
+        <textarea v-model="newNote" id="note" required></textarea>
+        <button type="submit">Add Note</button>
+      </form>
+    </div>
 
     <router-link to="/case-files">Back to Case Files</router-link>
   </div>
@@ -65,7 +65,6 @@
 
 <script>
 import { getDatabase, ref, get, update } from "firebase/database";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import Config from '../config';
 import { store } from '../scripts/store';
@@ -77,7 +76,6 @@ export default {
     return {
       caseFile: null,
       newNote: '',
-      selectedImage: null,
       newClue: {
         summary: '',
         details: '',
@@ -94,17 +92,15 @@ export default {
     // Initialize Firebase
     this.app = initializeApp(Config.firebaseConfig);
     this.db = getDatabase(this.app);
-    this.storage = getStorage(this.app);
     this.fetchCaseFile();
   },
   methods: {
     fetchCaseFile() {
-      const caseRef = ref(this.db, 'caseFiles/' + this.id);
+      var caseRef = ref(this.db, 'caseFiles/' + this.id);
       get(caseRef).then((snapshot) => {
         if (snapshot.exists()) {
           this.caseFile = snapshot.val();
           if (!this.caseFile.notes) this.caseFile.notes = [];
-          if (!this.caseFile.images) this.caseFile.images = [];
           if (!this.caseFile.clues) this.caseFile.clues = [];
           if (!this.caseFile.locations) this.caseFile.locations = [];
         } else {
@@ -115,7 +111,7 @@ export default {
       });
     },
     addNote() {
-      const note = {
+      var note = {
         content: this.newNote,
         timestamp: Date.now()
       };
@@ -123,31 +119,8 @@ export default {
       this.updateCaseFile();
       this.newNote = '';
     },
-    onImageChange(event) {
-      this.selectedImage = event.target.files[0];
-    },
-    uploadImage() {
-      if (!this.selectedImage) return;
-      
-      const imageRef = storageRef(this.storage, `images/${this.id}/${this.selectedImage.name}`);
-      uploadBytes(imageRef, this.selectedImage).then(snapshot => {
-        getDownloadURL(snapshot.ref).then(url => {
-          const image = {
-            name: this.selectedImage.name,
-            url: url
-          };
-          this.caseFile.images.push(image);
-          this.updateCaseFile();
-          this.selectedImage = null;
-        }).catch(error => {
-          console.error('Error getting image URL:', error);
-        });
-      }).catch(error => {
-        console.error('Error uploading image:', error);
-      });
-    },
     addClue() {
-      const clue = {
+      var clue = {
         id: Date.now().toString(),
         summary: this.newClue.summary,
         details: this.newClue.details,
@@ -167,7 +140,7 @@ export default {
       }
     },
     addLocation() {
-      const location = {
+      var location = {
         name: this.newLocation.name,
         description: this.newLocation.description
       };
@@ -176,7 +149,7 @@ export default {
       this.newLocation = { name: '', description: '' };
     },
     updateCaseFile() {
-      const caseRef = ref(this.db, 'caseFiles/' + this.id);
+      var caseRef = ref(this.db, 'caseFiles/' + this.id);
       update(caseRef, this.caseFile).catch(error => {
         console.error('Error updating case:', error);
       });
@@ -205,7 +178,7 @@ h1, h2, h3 {
   margin-bottom: 10px;
   color: #BDA567;
 }
-.notes, .images, .clues, .locations {
+.notes, .clues, .locations {
   margin-top: 20px;
 }
 form {
@@ -228,7 +201,7 @@ input[type="file"] {
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;
-  background-color: #1A1F2A;
+  background-color: #1a1a1a;
   color: #BDA567;
   font-family: 'Major Mono Display', monospace;
 }
@@ -260,13 +233,9 @@ li {
   border-radius: 4px;
   font-family: 'Major Mono Display', monospace;
 }
-img {
-  max-width: 100px;
-  margin: 10px;
-}
 a:-webkit-any-link {
     color: #BDA567;
-  }
+}
 a:-webkit-any-link:hover {
   color: #F8E5AB;
 }

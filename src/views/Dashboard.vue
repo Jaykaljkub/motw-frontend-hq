@@ -14,10 +14,10 @@
           <case-files></case-files>
         </div>
         <div class="dashboard-section">
-          <bestiary></bestiary>
+          <profile></profile>
         </div>
         <div class="dashboard-section">
-          <profile></profile>
+          <bestiary></bestiary>
         </div>
       </div>
     </main>
@@ -46,7 +46,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
 
 .dashboard {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
   background-color: #1A1F2A;
@@ -99,13 +99,17 @@ export default {
 
 .dashboard-sections {
   margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .dashboard-section {
+  min-width: 300px;
   background-color: #1A1F2A;
   margin-bottom: 10px;
   padding: 20px;
-  border: 1px solid #BDA567;
+  /* border: 1px solid #BDA567; */
   border-radius: 4px;
 }
 

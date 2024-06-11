@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-      <h1>Welcome to the Monster of the Week Portal</h1>
-      <router-link to="/Login">Go to Dashboard</router-link>
+      <h1>Welcome to The Midnight Watch</h1>
+      <router-link to="/Login">Login</router-link>
     </div>
   </template>
   

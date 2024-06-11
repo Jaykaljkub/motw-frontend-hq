@@ -1,10 +1,10 @@
 <template>
   <div class="edit-case-files">
-    <h1>{{ editingCase ? 'Edit' : 'Add' }} Case File</h1>
+    <h1>{{ caseFile.id ? 'Edit' : 'Add' }} Case File</h1>
     <form @submit.prevent="saveCaseFile">
       <div class="form-group">
         <label for="title">Title:</label>
-        <input type="text" v-model="caseFile.title" id="title" required />
+        <input type="text" v-model="caseFile.title" id="title" autocomplete="off" required />
       </div>
       <div class="form-group">
         <label for="summary">Summary:</label>
@@ -16,17 +16,20 @@
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" v-model="caseFile.password" id="password" required />
+        <input type="password" v-model="caseFile.password" id="password" autocomplete="off" required />
       </div>
-      <button type="submit">{{ editingCase ? 'Update' : 'Add' }} Case File</button>
+      <button type="submit">{{ caseFile.id ? 'Update' : 'Add' }} Case File</button>
     </form>
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, push, update } from "firebase/database";
-import { initializeApp } from "firebase/app";
+import { initializeApp, } from "firebase/app";
+import { getDatabase, ref, push, update, set, onValue } from "firebase/database";
+import {setClean} from '../scripts/setClean';
+import {updateClean} from '../scripts/updateClean';
 import Config from '../config';
+
 
 export default {
   name: 'EditCaseFiles',
@@ -36,10 +39,18 @@ export default {
   data() {
     return {
       caseFile: {
+        id: '',
         title: '',
         summary: '',
         details: '',
-        password: ''
+        status:'',
+        objectives:'',
+        password: '',
+        enteredPassword: '', 
+        detailsVisible: false, 
+        clues: [],
+        locations: [],
+        notes: []
       },
       db: null,
     };
@@ -49,6 +60,7 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.caseFile = { ...newVal };
+          this.initializeCaseFile(this.caseFile);
         }
       },
       immediate: true
@@ -59,28 +71,79 @@ export default {
     this.db = getDatabase(this.app);
   },
   methods: {
+    initializeCaseFile(caseFile) {
+      if (!caseFile.id) caseFile.id = '';
+      if (!caseFile.title) caseFile.title = '';
+      if (!caseFile.summary) caseFile.summary = '';
+      if (!caseFile.details) caseFile.details = '';
+      if (!caseFile.password) caseFile.password = '';
+    },
+    validateCaseFile(caseFile) {
+      var requiredProperties = ['id', 'title', 'summary', 'details', 'password'];
+      for (var prop of requiredProperties) {
+        if (!caseFile.hasOwnProperty(prop)) {
+          console.error(`Missing property: ${prop}`);
+          return false;
+        }
+        if (typeof caseFile[prop] !== 'string') {
+          console.error(`Incorrect type for property: ${prop}`);
+          return false;
+        }
+      }
+      return true;
+    },
     saveCaseFile() {
+      if (!this.validateCaseFile(this.caseFile)) {
+        alert('Case file data is invalid. Please check the input fields.');
+        return;
+      }
+
       if (this.caseFile.id) {
-        const caseRef = ref(this.db, 'caseFiles/' + this.caseFile.id);
-        update(caseRef, this.caseFile).then(() => {
+        var caseRef = ref(this.db, 'caseFiles/' + this.caseFile.id);
+        updateClean(caseRef, this.caseFile).then(() => {
           this.resetForm();
           this.$emit('saved');
         }).catch((error) => {
           console.error('Error updating case:', error);
         });
       } else {
-        const caseFilesRef = ref(this.db, 'caseFiles');
-        const newCaseRef = push(caseFilesRef);
-        newCaseRef.set(this.caseFile).then(() => {
+        var caseFilesRef = ref(this.db, 'caseFiles/');
+        var newCaseRef = push(caseFilesRef);
+        console.log('New Case Ref Key:', newCaseRef.key);
+        console.log('caseFile:', this.caseFile);
+
+        setClean(newCaseRef, { ...this.caseFile, id: newCaseRef.key })
+          .then(() => {
+            console.log('Data successfully written!');
+            this.resetForm();
+            this.$emit('saved');
+          })
+          .catch((error) => {
+            console.error('Error adding case:', error);
+            console.error('Error details:', error.message, error.stack);
+          });
+      }
+    },
+    saveCaseFileDebug() {
+      var caseFilesRef = ref(this.db, 'casemiles/');
+        var newCaseRef = push(caseFilesRef);
+        console.log('New Case Ref Key:', newCaseRef.key);
+        console.log('caseFile:', this.caseFile);
+
+        setClean(newCaseRef, { ...this.caseFile, id: newCaseRef.key })
+        .then(() => {
+          console.log('Data successfully written!');
           this.resetForm();
           this.$emit('saved');
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.error('Error adding case:', error);
-        });
-      }
+          console.error('Error details:', error.message, error.stack);
+        }); 
     },
     resetForm() {
       this.caseFile = {
+        id: '',
         title: '',
         summary: '',
         details: '',
@@ -100,7 +163,6 @@ export default {
   font-family: 'Major Mono Display', monospace;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
   max-width: 600px;
   margin: 0 auto;
   text-align: center;
@@ -122,11 +184,11 @@ label {
 input[type="text"],
 textarea,
 input[type="password"] {
-  width: 100%;
+  width: 95%;
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;
-  background-color: #1A1F2A;
+  background-color: #1a1a1a;
   color: #BDA567;
   font-family: 'Major Mono Display', monospace;
 }
@@ -145,9 +207,11 @@ button {
 button:hover {
   background-color: #F8E5AB;
 }
+
 a:-webkit-any-link {
-    color: #BDA567;
-  }
+  color: #BDA567;
+}
+
 a:-webkit-any-link:hover {
   color: #F8E5AB;
 }

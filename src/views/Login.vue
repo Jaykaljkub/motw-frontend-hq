@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ message }}</h1>
-    <div v-if="!store.isAuthenticated">
+    <div v-if="!store.isAuthenticated" class="input-container">
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
       <div>
         <label for="email">Email:</label>
@@ -18,9 +18,9 @@
       <div v-if="showRegister">
         <button @click="registerUser">Register</button>
       </div>
-      <div v-else>
+      <div class="cta-container" v-else>
         <button @click="loginUser">Login</button>
-        <p>No account? <a href="#" @click.prevent="showRegister = true">Click here to register</a></p>
+        <p>No account?<br/> <a href="#" @click.prevent="showRegister = true">Click here to register</a></p>
       </div>
     </div>
     <div v-else>
@@ -164,6 +164,33 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-right: 10px;
+  min-width: 100px;
+  max-height: 45px;
+  align-self: center;
+}
+.cta-container p {
+
+}
+.input-container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.input-container div {
+    display: flex;
+    justify-content: space-between;
+}
+input[type="password"], input[type="email"], input[type="text"] {
+  width: 50%;
+  padding: 8px;
+  border: 1px solid #BDA567;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #BDA567;
+  font-family: 'Major Mono Display', monospace;
+  margin-bottom: 10px;
+  margin-left: 50px;
 }
 a:-webkit-any-link {
     color: #BDA567;

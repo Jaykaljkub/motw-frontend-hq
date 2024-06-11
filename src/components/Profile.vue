@@ -138,7 +138,7 @@ input[type="text"],
 input[type="number"],
 textarea,
 select {
-  width: 100%;
+  width: 95%;
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;
