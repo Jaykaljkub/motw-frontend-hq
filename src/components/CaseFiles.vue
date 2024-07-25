@@ -11,13 +11,14 @@
         <div>
           <input type="password" v-model="caseFile.enteredPassword" placeholder="Enter password to view details" />
           <button @click="unlockDetails(caseFile)">Unlock Details</button>
+          <p v-if="caseFile.detailsVisible">{{ caseFile.status }}</p>
           <p v-if="caseFile.detailsVisible">{{ caseFile.details }}</p>
+          <router-link v-if="caseFile.detailsVisible" :to="'/case-files/' + caseFile.id">Read more</router-link>
         </div>
-        <div v-if="isAdmin">
+        <div class="btn-container" v-if="isAdmin">
           <button @click="editCaseFile(caseFile)">Edit</button>
           <button @click="deleteCaseFile(caseFile.id)">Delete</button>
         </div>
-        <router-link v-if="caseFile.detailsVisible" :to="'/case-files/' + caseFile.id">Read more</router-link>
       </li>
     </ul>
   </div>
@@ -158,11 +159,16 @@ input[type="password"] {
 }
 
 a:-webkit-any-link {
+    margin-top: 10px;
     color: #BDA567;
 }
 
 a:-webkit-any-link:hover {
   color: #F8E5AB;
+}
+
+.btn-container {
+  margin: 10px 0;
 }
 
 router-link {

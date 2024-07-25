@@ -11,6 +11,14 @@
         <textarea v-model="caseFile.summary" id="summary" required></textarea>
       </div>
       <div class="form-group">
+        <label for="objectives">Objectives:</label>
+        <textarea v-model="caseFile.objectives" id="objectives"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <textarea v-model="caseFile.status" id="status"></textarea>
+      </div>
+      <div class="form-group">
         <label for="details">Details:</label>
         <textarea v-model="caseFile.details" id="details" required></textarea>
       </div>

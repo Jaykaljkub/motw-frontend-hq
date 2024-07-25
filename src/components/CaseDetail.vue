@@ -68,6 +68,7 @@ import { getDatabase, ref, get, update } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import Config from '../config';
 import { store } from '../scripts/store';
+import {updateClean} from '../scripts/updateClean';
 
 export default {
   name: 'CaseDetail',
@@ -150,7 +151,7 @@ export default {
     },
     updateCaseFile() {
       var caseRef = ref(this.db, 'caseFiles/' + this.id);
-      update(caseRef, this.caseFile).catch(error => {
+      updateClean(caseRef, this.caseFile).catch(error => {
         console.error('Error updating case:', error);
       });
     }
@@ -217,6 +218,7 @@ button {
   font-size: 16px;
   text-transform: uppercase;
   transition: background-color 0.3s ease;
+  margin-top: 10px
 }
 button:hover {
   background-color: #F8E5AB;
