@@ -168,7 +168,7 @@ export default {
 .edit-case-files {
   background-color: #1A1F2A;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
@@ -198,7 +198,7 @@ input[type="password"] {
   border-radius: 4px;
   background-color: #1a1a1a;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
 }
 
 button {

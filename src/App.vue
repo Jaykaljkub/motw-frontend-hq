@@ -42,10 +42,11 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
 #app {
   display: flex;
-  font-family: 'Major Mono Display', sans-serif;
+  font-family: 'Newsreader', sans-serif;
   color: #BDA567;
   width: 100%;
   background: #1A1F2A;

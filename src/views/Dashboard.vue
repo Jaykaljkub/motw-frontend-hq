@@ -52,7 +52,7 @@ export default {
   background-color: #1A1F2A;
   border: 1px solid #BDA567;
   border-radius: 8px;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   color: #BDA567;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }

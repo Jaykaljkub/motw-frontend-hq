@@ -112,7 +112,7 @@ export default {
 .edit-beast {
   background-color: #1A1F2A;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
@@ -145,7 +145,7 @@ textarea {
   border-radius: 4px;
   background-color: #1a1a1a;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
 }
 button {
   background-color: #BDA567;

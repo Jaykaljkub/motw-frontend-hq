@@ -169,7 +169,7 @@ export default {
   background-color: #1A1F2A;
   border: 1px solid #BDA567;
   border-radius: 8px;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   color: #BDA567;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
@@ -204,7 +204,7 @@ input[type="file"] {
   border-radius: 4px;
   background-color: #1a1a1a;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
 }
 button {
   display: block;
@@ -233,7 +233,7 @@ li {
   padding: 10px;
   border: 1px solid #BDA567;
   border-radius: 4px;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
 }
 a:-webkit-any-link {
     color: #BDA567;

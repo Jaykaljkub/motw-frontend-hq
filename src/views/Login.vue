@@ -188,7 +188,7 @@ input[type="password"], input[type="email"], input[type="text"] {
   border-radius: 4px;
   background-color: #1a1a1a;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   margin-bottom: 10px;
   margin-left: 50px;
 }

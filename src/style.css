@@ -57,7 +57,7 @@ li.beast-item {
   padding: 10px;
   border: 1px solid #BDA567;
   border-radius: 4px;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
 }
 img {
   max-width: 100%;
@@ -84,7 +84,7 @@ input[type="password"] {
   border: 1px solid #BDA567;
   background-color: #1A1F2A;
   color: #BDA567;
-  font-family: 'Major Mono Display', monospace;
+  font-family: 'Newsreader', monospace;
   margin-right: 10px;
 }
 
@@ -97,6 +97,9 @@ input[type="password"] {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+.error {
+  margin-bottom: 15px;
 }
 
 @media (prefers-color-scheme: light) {
