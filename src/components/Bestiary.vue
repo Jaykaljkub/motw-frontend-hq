@@ -12,6 +12,7 @@
         <h2>Beasts</h2>
         <ul>
           <li v-for="beast in beasts" :key="beast.id" class="beast-item">
+            {{ checkVisibility(beast) }}
             <div v-if="!beast.entryVisible">
               <input v-model="beast.entryPasswordInput" type="password" placeholder="Enter password to view beast">
               <button @click="unlockEntry(beast)">Unlock Beast</button>
@@ -27,7 +28,7 @@
               <div v-if="beast.detailsVisible">
                 <p>Details: {{ beast.details }}</p>
               </div>
-              <p>Stats: {{ beast.stats }}</p>
+              <p v-if="beast.detailsVisible">Stats: {{ beast.stats }}</p>
               <div v-if="isAdmin">
                 <button @click="editBeast(beast)">Edit</button>
                 <button @click="deleteBeast(beast.id)">Delete</button>
@@ -46,6 +47,7 @@ import { getDatabase, ref, get, remove } from "firebase/database";
 import Config from '../config';
 import EditBeast from './EditBeast.vue';
 import { store } from '../scripts/store';
+import { setCookie, getCookie } from '../scripts/helperFunctions';
 
 export default {
   name: 'Bestiary',
@@ -100,9 +102,22 @@ export default {
       console.log('Admin check', store.isAdmin);
       this.isAdmin = store.isAdmin; // Replace this with actual admin check logic
     },
+    checkVisibility(beast){
+      getCookie(beast.id);
+      console.log(getCookie(beast.id));
+      if(getCookie(beast.id) != null) {
+        if(getCookie(beast.id).indexOf('detailsVisible') > -1){
+          beast.entryVisible = true;
+          beast.detailsVisible = true;
+        } else if (getCookie(beast.id).indexOf('entryVisible') > -1) {
+          beast.entryVisible = true;
+        }
+      }
+    },
     unlockEntry(beast) {
       if (beast.entryPasswordInput === beast.entryPassword || !beast.entryPassword) {
         beast.entryVisible = true;
+        setCookie(beast.id, 'entryVisible = true');
       } else {
         alert('Incorrect password!');
       }
@@ -110,6 +125,7 @@ export default {
     unlockDetails(beast) {
       if (beast.detailsPasswordInput === beast.detailsPassword || !beast.detailsPassword) {
         beast.detailsVisible = true;
+        setCookie(beast.id, 'detailsVisible = true');
       } else {
         alert('Incorrect password!');
       }

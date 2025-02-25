@@ -139,7 +139,7 @@ label {
 input[type="text"],
 input[type="password"],
 textarea {
-  width: 100%;
+  width: 90%;
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;

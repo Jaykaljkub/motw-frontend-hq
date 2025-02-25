@@ -9,7 +9,9 @@ import Profile from '../components/Profile.vue';
 import Bestiary from '../components/Bestiary.vue';
 
 const routes = [
-  { path: '/', name: 'Home', component: Home },
+  { path: '/', redirect: '/home'},
+  { path: '/motw-frontend-hq', redirect: '/home'},
+  { path: '/home', name: 'Home', component: Home },
   { path: '/login', name: 'Login', component: Login },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/case-files', name: 'CaseFiles', component: CaseFiles },

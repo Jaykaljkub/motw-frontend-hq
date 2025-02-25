@@ -25,9 +25,10 @@
       <h2>Clues</h2>
       <ul>
         <li class="clue-item" v-for="clue in caseFile.clues" :key="clue.id">
+          {{ checkVisibility(clue) }}
           <p>{{ clue.summary }}</p>
-          <input type="password" v-model="clue.enteredPassword" placeholder="Enter password to view clue" />
-          <button @click="unlockClue(clue)">Unlock Clue</button>
+          <input v-if="!clue.detailsVisible" type="password" v-model="clue.enteredPassword" placeholder="Enter password to view clue" />
+          <button v-if="!clue.detailsVisible" @click="unlockClue(clue)">Unlock Clue</button>
           <p v-if="clue.detailsVisible">{{ clue.details }}</p>
         </li>
       </ul>
@@ -69,6 +70,7 @@ import { initializeApp } from "firebase/app";
 import Config from '../config';
 import { store } from '../scripts/store';
 import {updateClean} from '../scripts/updateClean';
+import { setCookie, getCookie } from '../scripts/helperFunctions';
 
 export default {
   name: 'CaseDetail',
@@ -136,6 +138,7 @@ export default {
     unlockClue(clue) {
       if (clue.enteredPassword === clue.password) {
         clue.detailsVisible = true;
+        setCookie(clue.id, 'detailsVisible = true')
       } else {
         alert('Incorrect password');
       }
@@ -154,6 +157,13 @@ export default {
       updateClean(caseRef, this.caseFile).catch(error => {
         console.error('Error updating case:', error);
       });
+    },
+    checkVisibility(clue){
+      var cookie = getCookie(clue.id);
+      if(cookie !== null 
+      && cookie.indexOf('detailsVisible') > -1 ){
+        clue.detailsVisible = true;
+      }
     }
   }
 };
@@ -182,6 +192,9 @@ h1, h2, h3 {
 .notes, .clues, .locations {
   margin-top: 20px;
 }
+.notes {
+  margin-bottom: 20px;
+}
 form {
   margin-top: 10px;
 }
@@ -193,12 +206,13 @@ label {
   font-weight: bold;
   margin-bottom: 5px;
   color: #BDA567;
+  margin-top: 10px;
 }
 input[type="text"],
 textarea,
 input[type="password"],
 input[type="file"] {
-  width: 100%;
+  width: 95%;
   padding: 8px;
   border: 1px solid #BDA567;
   border-radius: 4px;
@@ -208,7 +222,7 @@ input[type="file"] {
 }
 button {
   display: block;
-  width: 100%;
+  width: 98%;
   padding: 10px;
   background-color: #BDA567;
   color: #1A1F2A;

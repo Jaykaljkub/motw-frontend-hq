@@ -6,13 +6,14 @@
     </div>
     <ul>
       <li class="casefile-item" v-for="caseFile in caseFiles" :key="caseFile.id">
+        {{ checkVisibility(caseFile) }}
         <h2>{{ caseFile.title }}</h2>
-        <p>{{ caseFile.summary }}</p>
+        <p>Summary: {{ caseFile.summary }}</p>
         <div>
-          <input type="password" v-model="caseFile.enteredPassword" placeholder="Enter password to view details" />
-          <button @click="unlockDetails(caseFile)">Unlock Details</button>
-          <p v-if="caseFile.detailsVisible">{{ caseFile.status }}</p>
-          <p v-if="caseFile.detailsVisible">{{ caseFile.details }}</p>
+          <input v-if="!caseFile.detailsVisible" type="password" v-model="caseFile.enteredPassword" placeholder="Enter password to view details" />
+          <button v-if="!caseFile.detailsVisible" @click="unlockDetails(caseFile)">Unlock Details</button>
+          <p v-if="caseFile.detailsVisible">Status: {{ caseFile.status }}</p>
+          <p v-if="caseFile.detailsVisible">Details: {{ caseFile.details }}</p>
           <router-link v-if="caseFile.detailsVisible" :to="'/case-files/' + caseFile.id">Read more</router-link>
         </div>
         <div class="btn-container" v-if="isAdmin">
@@ -30,7 +31,7 @@ import { initializeApp } from "firebase/app";
 import Config from '../config';
 import EditCaseFiles from './EditCaseFiles.vue';
 import { store } from '../scripts/store';
-import {removeClean} from '../scripts/removeClean';
+import { setCookie, getCookie } from '../scripts/helperFunctions';
 
 export default {
   name: 'CaseFiles',
@@ -51,44 +52,52 @@ export default {
   },
   methods: {
     fetchCaseFiles() {
-    var caseFilesRef = ref(this.db, 'caseFiles');
-    onValue(caseFilesRef, (snapshot) => {
-      var data = snapshot.val();
-      console.log('Fetched data:', data); // Log fetched data
-      if (data) {
-        let caseFilesArray = [];
-        for (var key in data) {
-          if (data.hasOwnProperty(key)) {
-            caseFilesArray.push({
-              id: key,
-              ...data[key],
-              enteredPassword: '',
-              detailsVisible: false
-            });
+      var caseFilesRef = ref(this.db, 'caseFiles');
+      onValue(caseFilesRef, (snapshot) => {
+        var data = snapshot.val();
+        console.log('Fetched data:', data); // Log fetched data
+        if (data) {
+          let caseFilesArray = [];
+          for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+              caseFilesArray.push({
+                id: key,
+                ...data[key],
+                enteredPassword: '',
+                detailsVisible: false
+              });
+            }
           }
+          console.log('Processed caseFilesArray:', caseFilesArray); // Log processed data
+          this.caseFiles = caseFilesArray;
+        } else {
+          this.caseFiles = [];
         }
-        console.log('Processed caseFilesArray:', caseFilesArray); // Log processed data
-        this.caseFiles = caseFilesArray;
-      } else {
-        this.caseFiles = [];
-      }
-      console.log('Updated caseFiles:', this.caseFiles); // Log final state update
-    }, error => {
-      console.error('Error fetching case files:', error);
-    });
-  },
+        console.log('Updated caseFiles:', this.caseFiles); // Log final state update
+      }, error => {
+        console.error('Error fetching case files:', error);
+      });
+    },
     editCaseFile(caseFile) {
       this.caseToEdit = { ...caseFile };
     },
     deleteCaseFile(id) {
       var caseRef = ref(this.db, 'caseFiles/' + id);
-      removeClean(caseRef).catch(error => console.error('Error deleting case:', error));
+      remove(caseRef).catch(error => console.error('Error deleting case:', error));
     },
     unlockDetails(caseFile) {
       if (caseFile.enteredPassword === caseFile.password) {
         caseFile.detailsVisible = true;
+        setCookie(caseFile.id, 'detailsVisible = true');
       } else {
         alert('Incorrect password');
+      }
+    },
+    checkVisibility(caseFile) {
+      var cookie = getCookie(caseFile.id);
+      if(cookie !== null 
+      && cookie.indexOf('detailsVisible') > -1 ){
+        caseFile.detailsVisible = true;
       }
     }
   }
