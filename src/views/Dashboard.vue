@@ -49,11 +49,11 @@ export default {
   max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #1A1F2A;
-  border: 1px solid #BDA567;
+  background-color: #1a1f2a6e;
+  border: 1px solid #b9943d;
   border-radius: 8px;
   font-family: 'Newsreader', monospace;
-  color: #BDA567;
+  color: #b9943d;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
@@ -67,7 +67,7 @@ export default {
 .title {
   font-size: 36px;
   text-transform: uppercase;
-  color: #BDA567;
+  color: #b9943d;
 }
 
 .menu {
@@ -84,7 +84,7 @@ export default {
 
 .menu li a {
   text-decoration: none;
-  color: #BDA567;
+  color: #b9943d;
   font-size: 18px;
   font-weight: bold;
   padding: 10px;
@@ -93,8 +93,8 @@ export default {
 }
 
 .menu li a.router-link-exact-active, .menu li a:hover {
-  background-color: #BDA567;
-  color: #1A1F2A;
+  background-color: #b9943d;
+  color: #1a1f2a6e;
 }
 
 .dashboard-sections {
@@ -106,10 +106,9 @@ export default {
 
 .dashboard-section {
   min-width: 300px;
-  background-color: #1A1F2A;
   margin-bottom: 10px;
   padding: 20px;
-  /* border: 1px solid #BDA567; */
+  /* border: 1px solid #b9943d; */
   border-radius: 4px;
 }
 

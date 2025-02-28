@@ -111,11 +111,11 @@ export default {
   max-width: 800px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #1A1F2A;
-  border: 1px solid #BDA567;
+  background-color: #1a1f2a6e;
+  border: 1px solid #b9943d;
   border-radius: 8px;
   font-family: 'Newsreader', monospace;
-  color: #BDA567;
+  color: #b9943d;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
@@ -123,7 +123,7 @@ h1, h2 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
-  color: #BDA567;
+  color: #b9943d;
 }
 
 ul {
@@ -132,17 +132,17 @@ ul {
 }
 
 li.casefile-item {
-  background-color: #1A1F2A;
+  background-color: #1a1f2a6e;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   font-family: 'Newsreader', monospace;
 }
 
 button {
-  background-color: #BDA567;
-  color: #1A1F2A;
+  background-color: #b9943d;
+  color: #1a1f2a6e;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -159,17 +159,17 @@ button:hover {
 input[type="password"] {
   width: 95%;
   padding: 8px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   background-color: #1a1a1a;
-  color: #BDA567;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
   margin-bottom: 10px;
 }
 
 a:-webkit-any-link {
     margin-top: 10px;
-    color: #BDA567;
+    color: #b9943d;
 }
 
 a:-webkit-any-link:hover {
@@ -181,7 +181,7 @@ a:-webkit-any-link:hover {
 }
 
 router-link {
-  color: #BDA567;
+  color: #b9943d;
   text-decoration: none;
 }
 

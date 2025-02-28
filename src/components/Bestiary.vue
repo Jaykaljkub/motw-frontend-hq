@@ -141,28 +141,28 @@ export default {
   max-width: 800px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #1A1F2A;
-  border: 1px solid #BDA567;
+  background-color: #1a1f2a6e;
+  border: 1px solid #b9943d;
   border-radius: 8px;
   font-family: 'Newsreader', monospace;
-  color: #BDA567;
+  color: #b9943d;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 h1, h2 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
-  color: #BDA567;
+  color: #b9943d;
 }
 ul {
   list-style-type: none;
   padding-left: 0;
 }
 li.beast-item {
-  background-color: #1A1F2A;
+  background-color: #1a1f2a6e;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   font-family: 'Newsreader', monospace;
 }
@@ -172,8 +172,8 @@ img {
   border-radius: 8px;
 }
 button {
-  background-color: #BDA567;
-  color: #1A1F2A;
+  background-color: #b9943d;
+  color: #1a1f2a6e;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -188,9 +188,9 @@ button:hover {
 input[type="password"] {
   padding: 10px;
   border-radius: 4px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   background-color: #1a1a1a;
-  color: #BDA567;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
   margin-right: 10px;
 }

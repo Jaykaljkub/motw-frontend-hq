@@ -110,8 +110,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
 
 .edit-beast {
-  background-color: #1A1F2A;
-  color: #BDA567;
+  background-color: #1a1f2a6e;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
   padding: 20px;
   border-radius: 10px;
@@ -134,21 +134,21 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #BDA567;
+  color: #b9943d;
 }
 input[type="text"],
 input[type="password"],
 textarea {
   width: 90%;
   padding: 8px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   background-color: #1a1a1a;
-  color: #BDA567;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
 }
 button {
-  background-color: #BDA567;
+  background-color: #b9943d;
   color: #0c0c0c;
   border: none;
   padding: 10px 20px;

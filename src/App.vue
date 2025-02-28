@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <nav>
+      <img src="./assets/Midnight Watch.svg" @click="toggleTimeline">
       <ul>
-        <li><router-link to="/">Home</router-link></li>
+        <li ><router-link to="/">Home</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/dashboard">Dashboard</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/bestiary">Bestiary</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/case-files">Case Files</router-link></li>
@@ -24,10 +25,38 @@
 <script>
 import { store } from './scripts/store';
 import { signOut, getAuth } from "firebase/auth";
+import { onMounted, onUnmounted, ref } from 'vue';
+import gsap from 'gsap';
+import { TextPlugin } from "gsap/TextPlugin";
 
 export default {
   name: 'App',
   setup() {
+    gsap.registerPlugin(TextPlugin);
+    const main = ref();
+    let tl;
+    let ctx;
+
+    function toggleTimeline() {
+      tl.reversed(!tl.reversed());
+    }
+
+    onMounted(() => {
+      ctx = gsap.context((self) => {
+        const boxes = gsap.utils.toArray('nav li');
+        tl = gsap
+          .timeline()
+          .to(boxes[0], { x: 120, rotation: 360 })
+          .to(boxes[1], { x: -120, rotation: -360 }, '<')
+          .to(boxes[2], { y: -166 })
+          .reverse();
+      }, main.value); // <- Scope!
+    });
+
+    onUnmounted(() => {
+      ctx.revert(); // <- Easy Cleanup!
+    });
+
     return { store };
   },
   methods: {
@@ -59,34 +88,42 @@ export default {
   transform: translateX(-120px);
   opacity: 0;
 }
-
+body {
+  margin: 0;
+}
 #app {
   display: flex;
   font-family: 'Newsreader', sans-serif;
-  color: #BDA567;
+  color: #b9943d;
   width: 100%;
-  background: #1A1F2A;
+  background-image: url('./assets/BG_Hero-CLmz8Hzx.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
   min-height: 100vh;
+  flex-direction: column;
 }
 nav {
-  background: #1A1F2A;
-  padding: 20px;
-  min-width: 150px;
-  min-height: 100vh;
-  border-right: 1px solid #BDA567;
+  display: flex;
+  justify-items: center;
+  background: #1a1f2a6e;
+  border-bottom: 1px solid #b9943d;
   position: relative;
   z-index: 2;
   /* box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); */
 }
 nav ul {
+  display: flex;
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 nav li {
-  margin-bottom: 10px;
+  display: flex;
+  margin-bottom: 0px;
+  align-items: center;
 }
 nav a {
-  color: #BDA567;
+  color: #b9943d;
   text-decoration: none;
   font-weight: bold;
   display: block;
@@ -95,14 +132,17 @@ nav a {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 nav a.router-link-exact-active, nav a:hover {
-  background-color: #BDA567;
+  background-color: #b9943d;
   color: #0c0c0c;
+}
+nav img {
+  width: 60px;
+  height: 60px;
 }
 main {
   flex-grow: 1;
   padding: 20px;
-  background: #1A1F2A;
-  border-left: 1px solid #BDA567;
+  /* background: #1a1f2a6e; */
   /* box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.3); */
   min-height: 100vh;
 }

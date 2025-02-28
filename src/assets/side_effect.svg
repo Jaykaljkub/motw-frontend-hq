@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 115 16" fill="none" class="eyebrow_svg hide-mobile">
+    <circle cx="3" cy="3" r="2.5" transform="matrix(-1 0 0 1 10 5)" stroke="currentColor"></circle>
+    <rect width="1" height="16" rx="0.5" transform="matrix(-1 0 0 1 1 0)" fill="currentColor"></rect>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M109 7.5H105V8.5H109V7.5ZM111 8.5H115V7.5H111V8.5ZM93 7.5H103V8.5H93V7.5ZM88 7.5H79V8.5H88V7.5ZM56 7.5H71V8.5H56V7.5ZM54 7.5H49V8.5H54V7.5ZM41 7.5H47V8.5H41V7.5ZM32 7.5H23V8.5H32V7.5ZM9 7.5H20V8.5H9V7.5Z" fill="currentColor"></path>
+</svg>

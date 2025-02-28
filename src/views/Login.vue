@@ -155,8 +155,8 @@ export default {
   color: red;
 }
 button {
-  background-color: #BDA567;
-  color: #1A1F2A;
+  background-color: #b9943d;
+  color: #1a1f2a6e;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -184,16 +184,16 @@ button {
 input[type="password"], input[type="email"], input[type="text"] {
   width: 50%;
   padding: 8px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   background-color: #1a1a1a;
-  color: #BDA567;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
   margin-bottom: 10px;
   margin-left: 50px;
 }
 a:-webkit-any-link {
-    color: #BDA567;
+    color: #b9943d;
   }
 a:-webkit-any-link:hover {
   color: #F8E5AB;

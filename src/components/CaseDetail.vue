@@ -176,18 +176,18 @@ export default {
   max-width: 800px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #1A1F2A;
-  border: 1px solid #BDA567;
+  background-color: #1a1f2a6e;
+  border: 1px solid #b9943d;
   border-radius: 8px;
   font-family: 'Newsreader', monospace;
-  color: #BDA567;
+  color: #b9943d;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 h1, h2, h3 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
-  color: #BDA567;
+  color: #b9943d;
 }
 .notes, .clues, .locations {
   margin-top: 20px;
@@ -205,7 +205,7 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #BDA567;
+  color: #b9943d;
   margin-top: 10px;
 }
 input[type="text"],
@@ -214,18 +214,18 @@ input[type="password"],
 input[type="file"] {
   width: 95%;
   padding: 8px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   background-color: #1a1a1a;
-  color: #BDA567;
+  color: #b9943d;
   font-family: 'Newsreader', monospace;
 }
 button {
   display: block;
   width: 98%;
   padding: 10px;
-  background-color: #BDA567;
-  color: #1A1F2A;
+  background-color: #b9943d;
+  color: #1a1f2a6e;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -242,15 +242,15 @@ ul {
   padding-left: 0;
 }
 li {
-  background-color: #1A1F2A;
+  background-color: #1a1f2a6e;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #BDA567;
+  border: 1px solid #b9943d;
   border-radius: 4px;
   font-family: 'Newsreader', monospace;
 }
 a:-webkit-any-link {
-    color: #BDA567;
+    color: #b9943d;
 }
 a:-webkit-any-link:hover {
   color: #F8E5AB;
