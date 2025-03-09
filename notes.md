@@ -190,3 +190,12 @@ Theories on Origin.
 5️⃣ The Forbidden Vault (Hidden Section)
 Requires special clearance or decryption to view the most dangerous relics.
 Could include "Unidentified Objects" or "Lost Relics of Unknown Origin."
+
+
+## Notes on making SVG comp
+
+- Make sure the svgs are in a div with the classname of the component
+- Make sure it is imported
+- Make sure it is properly called ie <Component></Component>
+- Make sure the name is properly matched
+- Register the classname of the component in config

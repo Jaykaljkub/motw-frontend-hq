@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <nav>
-      <img src="./assets/Midnight Watch.svg" @click="toggleTimeline">
+      <img src="../src/assets/svgs/Midnight Watch.svg" @click="toggleTimeline">
       <ul>
         <li ><router-link to="/">Home</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/dashboard">Dashboard</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/bestiary">Bestiary</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/case-files">Case Files</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/profile">Profile</router-link></li>
-        <li v-if="!store.isAuthenticated"><router-link to="/login">Login</router-link></li>
+        <!-- <li v-if="!store.isAuthenticated"><router-link to="/login">Login</router-link></li> -->
         <li v-if="store.isAuthenticated"><a href="#" @click="logout">Logout</a></li>
       </ul>
     </nav>
@@ -33,30 +33,7 @@ export default {
   name: 'App',
   setup() {
     gsap.registerPlugin(TextPlugin);
-    const main = ref();
-    let tl;
-    let ctx;
-
-    function toggleTimeline() {
-      tl.reversed(!tl.reversed());
-    }
-
-    onMounted(() => {
-      ctx = gsap.context((self) => {
-        const boxes = gsap.utils.toArray('nav li');
-        tl = gsap
-          .timeline()
-          .to(boxes[0], { x: 120, rotation: 360 })
-          .to(boxes[1], { x: -120, rotation: -360 }, '<')
-          .to(boxes[2], { y: -166 })
-          .reverse();
-      }, main.value); // <- Scope!
-    });
-
-    onUnmounted(() => {
-      ctx.revert(); // <- Easy Cleanup!
-    });
-
+   
     return { store };
   },
   methods: {
@@ -85,7 +62,7 @@ export default {
 }
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(-120px);
+  transform: translateY(120px);
   opacity: 0;
 }
 body {
@@ -96,7 +73,7 @@ body {
   font-family: 'Newsreader', sans-serif;
   color: #b9943d;
   width: 100%;
-  background-image: url('./assets/BG_Hero-CLmz8Hzx.webp');
+  background-image: url('../src/assets/backgrounds/BG_Hero-CLmz8Hzx.webp');
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;

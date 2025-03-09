@@ -103,7 +103,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
 
 .profile {
   max-width: 800px;
