@@ -16,7 +16,7 @@
           <Login></Login>
       </div>
       <div v-else class="auth-center">
-        <h1>COMING SOON</h1>
+        <HomePageWidget></HomePageWidget>
       </div>
       <div class="center-flair-mid-left">
         <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
@@ -56,34 +56,18 @@ import PersonelWidget from '../components/svgcomps/PersonelWidget.vue';
 import BeastiaryWidget from '../components/svgcomps/BeastiaryWidget.vue';
 import UnauthWidget from '../components/svgcomps/UnAuthWidget.vue'
 import Login from './Login.vue';
+import HomePageWidget from '../components/svgcomps/HomePageWidget.vue';
 
 export default {
   name: 'Home',
   setup() {
-    const text = "The Night Sees Everything.";
-    const splitText = ref(text.split(""));// Splitting text into letters
-    const text2 = "In the darkness, we watch. In the silence, we act.";
-    const splitText2 = ref(text2.split(""));// Splitting text into letters
-    const lettersRef = ref(null); // Reference to the span container
+
 
   
     onMounted(async () => {
       await nextTick(); // Ensures Vue has finished rendering before GSAP runs
 
-      var tl = gsap.timeline();
-      tl.from(".letter", {
-        opacity: 0,
-        duration: 0.6,
-        delay: 0.3,
-        ease: "power3.out",
-        stagger: 0.05, // Controls the delay between each letter
-      });
-      tl.to('.link', {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power3.out",
-      });
+      
     });
 
     function showModal() {
@@ -93,15 +77,8 @@ export default {
         duration: 0.6
       })
     }
-    function closeModal() {
-      gsap.to('.sign-in-modal', {
-        height: 0,
-        duration: 0.6,
-        visibility : 'hidden',
-      })
-    }
 
-    return { splitText, splitText2, lettersRef, store, showModal, closeModal };
+    return {store, showModal };
   },
   components: {
     HomePageFlair,
@@ -116,7 +93,8 @@ export default {
     PersonelWidget,
     BeastiaryWidget,
     UnauthWidget,
-    Login
+    Login,
+    HomePageWidget
   }
 };
 </script>
@@ -130,6 +108,7 @@ export default {
   padding: 5px;
   height: 100vh;
   width: 95vw;
+  max-width: 1275px;
 }
 /* line-based placement */
 .left-side-flair-top { grid-column: 1 / 1; grid-row: 1 / 4; }
@@ -150,7 +129,10 @@ export default {
 .center-flair-mid-right { grid-column: 3 / 3; grid-row: 5 / 11; }
 .right-side-flair-top { grid-column: 4 / 4; grid-row: 1 / 5; }
 .right-side-flair-mid { grid-column: 4 / 4; grid-row: 5 / 11; }
-
+.auth-center {
+    grid-column: 2 / 4;
+    grid-row: 1 / 5;
+}
 .grid-container > div {
   text-align: center;
  

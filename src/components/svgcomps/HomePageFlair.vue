@@ -641,14 +641,14 @@ export default {
         var midPaths = document.querySelectorAll('.homepageflair .mid-graphic svg g path');
         var bottomPaths = document.querySelectorAll('.homepageflair .bottom-chart svg path');
 
-        function animatePathRand(path) {
+        function animatePathRandHomeFlair(path) {
           gsap.to(path, {
             duration: 1, // Random duration between 0.3 - 0.8s
             opacity: () => Math.random() > 0.5 ? 0 : 1, // Randomly make it disappear or appear
             ease: "power1.inOut",
             stagger: 0.1,
             onComplete: () => {
-              setTimeout(() => animatePathRand(path), Math.random() * 1000);
+              setTimeout(() => animatePathRandHomeFlair(path), Math.random() * 1000);
             }
           });
         };
@@ -672,13 +672,13 @@ export default {
         })
 
         topPaths.forEach(path => {
-         setTimeout(()=> animatePathRand(path), Math.random()*1000);
+         setTimeout(()=> animatePathRandHomeFlair(path), Math.random()*1000);
         });
         midPaths.forEach(path => {
           setTimeout(() => animatePathCirc(path), Math.random() * 1000 );
         })
         bottomPaths.forEach(path => {
-         setTimeout(()=> animatePathRand(path), Math.random()*1000);
+         setTimeout(()=> animatePathRandHomeFlair(path), Math.random()*1000);
         });
 
       });

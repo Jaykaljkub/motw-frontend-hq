@@ -3,24 +3,9 @@
     <div class="header">
       <h1 class="title">Dashboard</h1>
     </div>
-    <ul class="menu">
-      <li><router-link to="/case-files">Case Files</router-link></li>
-      <li><router-link to="/bestiary">Bestiary</router-link></li>
-      <li><router-link to="/profile">Profile</router-link></li>
-    </ul>
-    <main>
-      <div class="dashboard-sections">
-        <div class="dashboard-section">
-          <case-files></case-files>
-        </div>
-        <div class="dashboard-section">
-          <profile></profile>
-        </div>
-        <div class="dashboard-section">
-          <bestiary></bestiary>
-        </div>
-      </div>
-    </main>
+    <div class="component-testing">
+      <HomePageWidget></HomePageWidget>
+    </div>
     <div class="footer">
       <p>&copy; 2024 The Night Watch</p>
     </div>
@@ -28,16 +13,13 @@
 </template>
 
 <script>
-import CaseFiles from '../components/CaseFiles.vue';
-import Bestiary from '../components/Bestiary.vue';
-import Profile from '../components/Profile.vue';
+
+import HomePageWidget from '../components/svgcomps/HomePageWidget.vue';
 
 export default {
   name: 'Dashboard',
   components: {
-    CaseFiles,
-    Bestiary,
-    Profile
+    HomePageWidget
   }
 };
 </script>

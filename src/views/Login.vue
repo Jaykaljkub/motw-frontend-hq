@@ -265,7 +265,6 @@ export default {
       if (user) {
         store.login({ uid: user.uid });
         this.fetchUserName(user.uid);
-        this.closeModal();
       } else {
         store.logout();
       }

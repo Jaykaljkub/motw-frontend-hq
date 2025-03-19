@@ -596,19 +596,19 @@ import {
         var midOutlineContent = document.querySelectorAll('.acquisitionswidget .glasser .mid-display svg path:not(.outline)');
         var bottomIcons = document.querySelectorAll('.acquisitionswidget .glasser .bottom-icons svg');
 
-        function animatePathRand(path) {
+        function animatePathRandAcquisition(path) {
           gsap.to(path, {
             duration: 1, // Random duration between 0.3 - 0.8s
             opacity: () => Math.random() > 0.5 ? 0 : 1, // Randomly make it disappear or appear
             ease: "power1.inOut",
             stagger: 0.1,
             onComplete: () => {
-              setTimeout(() => animatePathRand(path), Math.random() * 1000);
+              setTimeout(() => animatePathRandAcquisition(path), Math.random() * 1000);
             }
           });
         };
         topPaths.forEach(path => {
-         setTimeout(()=> animatePathRand(path), Math.random()*1000);
+         setTimeout(()=> animatePathRandAcquisition(path), Math.random()*1000);
         });
 
         midOutlineTl.set("#maskRect", {
@@ -645,7 +645,6 @@ import {
          })
       });
       onUnmounted(async () => {
-
       })
     }
   };
@@ -658,6 +657,7 @@ import {
   height: auto;
   max-width: 260px;
   max-height: 300px;
+  min-height: 260px;
 }
 .acquisitionswidget svg {
   width: 100%;

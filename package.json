@@ -11,8 +11,11 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@tresjs/core": "^4.3.3",
     "firebase": "^10.12.2",
+    "globe.gl": "^2.41.1",
     "gsap": "^3.12.7",
+    "three": "^0.174.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },
