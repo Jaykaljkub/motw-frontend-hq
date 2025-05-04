@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav>
-      <img src="../src/assets/svgs/Midnight Watch.svg" @click="toggleTimeline">
+      <img src="/mw_logo.svg" @click="toggleTimeline">
       <ul>
         <li ><router-link to="/">Home</router-link></li>
         <li v-if="store.isAuthenticated"><router-link to="/dashboard">Dashboard</router-link></li>

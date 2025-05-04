@@ -7,7 +7,7 @@
       <HomePageWidget></HomePageWidget>
     </div>
     <div class="footer">
-      <p>&copy; 2024 The Night Watch</p>
+      <p>&copy; 2025 The Night Watch</p>
     </div>
   </div>
 </template>

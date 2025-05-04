@@ -2428,6 +2428,7 @@
   
   <style scoped>
     .reliquarywidget {
+      position: relative;
         width: 100%;
         height: auto;
         max-width: 260px;
@@ -2449,6 +2450,45 @@
         display: flex;
         justify-items: center;
         justify-content: center;
+    }
+    .glasser {
+      cursor: pointer;
+    }
+    /* Frosted Glass Effect */
+    .glasser::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateY(-50%);
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0, 0.25);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+    }
+
+    /* Label Text */
+    .glasser::after {
+        content: "Reliquary";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5rem;
+        color: #fff;
+        font-weight: bold;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+    }
+
+    /* Hover Effect */
+    .glasser:hover::before,
+    .glasser:hover::after {
+        opacity: 1;
     }
   </style>
   

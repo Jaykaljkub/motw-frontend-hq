@@ -1,5 +1,6 @@
 <template>
 <div class="homepageflair">
+  <div class="glasser">
     <div class="top-banner">
     <svg viewBox="0 0 244 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M52.8259 8.28H58.8039V10.2372H52.8259V8.28Z" fill="#B9943D"/>
@@ -623,6 +624,7 @@
         </defs>
     </svg>
   </div>
+  </div>
 </div>
 </template>
 
@@ -693,6 +695,7 @@ export default {
     max-width: 260px;
     max-height: 300px;
     display: block;
+    position: relative;
 }
 .homepageflair svg {
   width: 100%;
@@ -708,5 +711,45 @@ export default {
 width: 100%;
 height: auto;
 display: block;
+}
+
+.glasser {
+  cursor: pointer;
+}
+/* Frosted Glass Effect */
+.glasser::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-50%);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+/* Label Text */
+.glasser::after {
+    content: "Chronicler";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* Hover Effect */
+.glasser:hover::before,
+.glasser:hover::after {
+    opacity: 1;
 }
 </style>
