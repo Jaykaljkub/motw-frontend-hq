@@ -237,12 +237,46 @@ a.router-link-exact-active, a:hover {
   background-color: #b9943d;
   color: #0c0c0c;
 }
-
 .icon {
   width: 100px;
   height: 100px;
   display: block;
   fill: red;
+}
+@media screen and (max-width:768px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-rows: repeat(10, 1fr);
+    grid-gap: 5px;
+    padding: 5px;
+    height: 100vh;
+    width: 95vw;
+    max-width: 1275px;
+  }
+  /* line-based placement */
+  .left-side-flair-top { grid-column: 1 / 1; grid-row: 1 / 4; }
+  .left-side-flair-mid { grid-column: 1 / 1; grid-row: 4 / 7; }
+  .left-side-flair-bot { grid-column: 1 / 1; grid-row: 7 / 10; }
+  .left-side-flair-top,
+  .left-side-flair-mid,
+  .left-side-flair-bot { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .left-side-flair-mid {
+    margin-top: 20px;
+  }
+  .center-flair-top { grid-column: 2 / 4; grid-row: 1 / 5; }
+  .center-flair-mid-left { grid-column: 2 / 2; grid-row: 5 / 11; }
+  .center-flair-mid-right { grid-column: 3 / 3; grid-row: 5 / 11; }
+  .right-side-flair-top { grid-column: 4 / 4; grid-row: 1 / 5; }
+  .right-side-flair-mid { grid-column: 4 / 4; grid-row: 5 / 11; }
+  .auth-center {
+      grid-column: 2 / 4;
+      grid-row: 1 / 5;
+  }
 }
 
 </style>
