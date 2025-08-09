@@ -1,51 +1,65 @@
 <template>
   <div class="home">
     <div class="grid-container">
+      <!-- Left column stack -->
       <div class="left-side-flair-top">
-        <HomePageFlair></HomePageFlair>
+        <HomePageFlair />
       </div>
+
       <div class="left-side-flair-mid">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <AcquisitionsWidget v-else></AcquisitionsWidget>
-      </div>  
-      <div class="left-side-flair-bot">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <ReliquaryWidget v-else></ReliquaryWidget>
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <AcquisitionsWidget v-else />
       </div>
-      <div  v-if="!store.isAuthenticated" class="box-el-1 center-flair-top">
-          <Login></Login>
+
+      <div class="left-side-flair-bot">
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <ReliquaryWidget v-else />
+      </div>
+
+      <!-- Center top (login or main hub) -->
+      <div v-if="!store.isAuthenticated" class="center-flair-top">
+        <div class="login-wrap">
+          <Login />
+        </div>
       </div>
       <div v-else class="auth-center">
-        <HomePageWidget></HomePageWidget>
+        <HomePageWidget />
       </div>
+
+      <!-- Center mid -->
       <div class="center-flair-mid-left">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <MissionsWidget v-else ></MissionsWidget>
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <MissionsWidget v-else />
       </div>
+
       <div class="center-flair-mid-right">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <OperationsWidget v-else></OperationsWidget>
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <OperationsWidget v-else />
       </div>
+
+      <!-- Right column stack -->
       <div class="right-side-flair-top">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <PersonelWidget v-else></PersonelWidget>
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <PersonelWidget v-else />
       </div>
+
       <div class="right-side-flair-mid">
-        <UnauthWidget v-if="!store.isAuthenticated"></UnauthWidget>
-        <BeastiaryWidget v-else></BeastiaryWidget>
-      </div>  
+        <UnauthWidget v-if="!store.isAuthenticated" />
+        <BeastiaryWidget v-else />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { store } from '../scripts/store';
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, nextTick } from 'vue';
 import gsap from 'gsap';
-import { RouterView } from 'vue-router';
+
 import CaseFiles from '../components/CaseFiles.vue';
 import Bestiary from '../components/Bestiary.vue';
 import Profile from '../components/Profile.vue';
+
 import UnAuthBackGr from '../components/svgcomps/UnAuthBck.vue';
 import HomePageFlair from '../components/svgcomps/HomePageFlair.vue';
 import AcquisitionsWidget from '../components/svgcomps/AcquisitionsWidget.vue';
@@ -54,20 +68,16 @@ import MissionsWidget from '../components/svgcomps/MissionWidget.vue';
 import OperationsWidget from '../components/svgcomps/OperationsWidget.vue';
 import PersonelWidget from '../components/svgcomps/PersonelWidget.vue';
 import BeastiaryWidget from '../components/svgcomps/BeastiaryWidget.vue';
-import UnauthWidget from '../components/svgcomps/UnAuthWidget.vue'
+import UnauthWidget from '../components/svgcomps/UnAuthWidget.vue';
 import Login from './Login.vue';
 import HomePageWidget from '../components/svgcomps/HomePageWidget.vue';
 
 export default {
   name: 'Home',
   setup() {
-
-
-  
     onMounted(async () => {
-      await nextTick(); // Ensures Vue has finished rendering before GSAP runs
-
-      
+      await nextTick();
+      // place any entrance animations if needed
     });
 
     function showModal() {
@@ -75,10 +85,10 @@ export default {
         visibility: 'visible',
         height: 'auto',
         duration: 0.6
-      })
+      });
     }
 
-    return {store, showModal };
+    return { store, showModal };
   },
   components: {
     HomePageFlair,
@@ -100,183 +110,128 @@ export default {
 </script>
 
 <style scoped>
-.grid-container {
-  display: grid;
-  grid-template-columns: 20% 30% 30% 20%;
-  grid-template-rows: repeat(10, 1fr);
-  grid-gap: 5px;
-  padding: 5px;
-  height: 100vh;
-  width: 95vw;
-  max-width: 1275px;
-}
-/* line-based placement */
-.left-side-flair-top { grid-column: 1 / 1; grid-row: 1 / 4; }
-.left-side-flair-mid { grid-column: 1 / 1; grid-row: 4 / 7; }
-.left-side-flair-bot { grid-column: 1 / 1; grid-row: 7 / 10; }
-.left-side-flair-top,
-.left-side-flair-mid,
-.left-side-flair-bot { 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.left-side-flair-mid {
-  margin-top: 20px;
-}
-.center-flair-top { grid-column: 2 / 4; grid-row: 1 / 5; }
-.center-flair-mid-left { grid-column: 2 / 2; grid-row: 5 / 11; }
-.center-flair-mid-right { grid-column: 3 / 3; grid-row: 5 / 11; }
-.right-side-flair-top { grid-column: 4 / 4; grid-row: 1 / 5; }
-.right-side-flair-mid { grid-column: 4 / 4; grid-row: 5 / 11; }
-.auth-center {
-    grid-column: 2 / 4;
-    grid-row: 1 / 5;
-}
-.grid-container > div {
-  text-align: center;
- 
-}
-.grid-container > div::-webkit-scrollbar {
-  display: none;
-}
-* { box-sizing: border-box; margin: 0; }
-.sign-in-modal {
-  visibility: hidden;
-  height: 0;
-  position: absolute;
-  background-color: #1a1f2af2;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 25px;
-  border-radius: 15px;
-  border: 1px solid  #b9943d;
-  overflow: hidden;
-}
-.sign-in-modal .modal-logo {
-  width: 150px;
-}
-.sign-in-modal .st0 {
-  fill: #b9943d
-} 
-.sign-in-modal #close-icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50px;
-  height: 50px;
-}
-.sign-in-modal #BG {
-  fill: none;
-}
-/* Animation start for sign in */
-.slide-enter-active {
-  transition-duration: 0.3s;
-  transition-timing-function: ease-in;
-}
-
-.slide-leave-active {
-  transition-duration: 0.3s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-}
-
-.slide-enter-to,
-.slide-leave-from {
-  overflow: hidden;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  overflow: hidden;
-  height: 0;
-}
-/* Animation end for sign in */
-.main-logo {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
-}
+/* Layout shell */
 .home {
   display: flex;
   flex-direction: column;
-  text-align: center;
-  margin-top: 50px;
   align-items: center;
+  padding-block: 40px;
 }
-.home-text {
-  display: block;
-  font-size: 2rem;
-  font-weight: bold;
+
+/* Named-area grid */
+.grid-container {
+  display: grid;
+  gap: 8px;
+  width: 95vw;
+  max-width: 1275px;
+  grid-template-columns: 20% 1fr 1fr 20%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "left-top center-top center-top right-top"
+    "left-top center-top center-top right-top"
+    "left-mid center-left center-right right-mid"
+    "left-bot center-left center-right right-mid";
 }
-.home-text-subtitle {
-  margin-top: 15px;
+
+/* Grid areas */
+.left-side-flair-top   { grid-area: left-top; }
+.left-side-flair-mid   { grid-area: left-mid; }
+.left-side-flair-bot   { grid-area: left-bot; }
+.center-flair-top      { grid-area: center-top; }
+.auth-center           { grid-area: center-top; }
+.center-flair-mid-left { grid-area: center-left; }
+.center-flair-mid-right{ grid-area: center-right; }
+.right-side-flair-top  { grid-area: right-top; }
+.right-side-flair-mid  { grid-area: right-mid; }
+
+/* Common widget container styling */
+.grid-container > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  min-width: 0; /* prevents overflow on responsive shrink */
 }
-.letter {
-  display: inline-block;
-  opacity: 1;
+
+/* Center + size the login card */
+.login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
 }
-.link {
-  opacity: 0;
-  transform: translateY(20px);
+
+.login-wrap > * {
+  width: min(100%, 520px);
+  max-width: 100%;
 }
-a {
-  width: 200px;
-  margin: 0 auto;
-  margin-top: 30px;
-  color: #b9943d;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  padding: 10px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+
+/* Make SVGs inside responsive */
+:deep(svg) {
+  max-width: 100%;
+  height: auto;
 }
-a.router-link-exact-active, a:hover {
-  background-color: #b9943d;
-  color: #0c0c0c;
-}
-.icon {
-  width: 100px;
-  height: 100px;
-  display: block;
-  fill: red;
-}
-@media screen and (max-width:768px) {
+
+/* Tablet breakpoint: collapse to 2 cols */
+@media (max-width: 1024px) {
   .grid-container {
-    display: grid;
-    grid-template-columns: 20% 30% 30% 20%;
-    grid-template-rows: repeat(10, 1fr);
-    grid-gap: 5px;
-    padding: 5px;
-    height: 100vh;
-    width: 95vw;
-    max-width: 1275px;
-  }
-  /* line-based placement */
-  .left-side-flair-top { grid-column: 1 / 1; grid-row: 1 / 4; }
-  .left-side-flair-mid { grid-column: 1 / 1; grid-row: 4 / 7; }
-  .left-side-flair-bot { grid-column: 1 / 1; grid-row: 7 / 10; }
-  .left-side-flair-top,
-  .left-side-flair-mid,
-  .left-side-flair-bot { 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .left-side-flair-mid {
-    margin-top: 20px;
-  }
-  .center-flair-top { grid-column: 2 / 4; grid-row: 1 / 5; }
-  .center-flair-mid-left { grid-column: 2 / 2; grid-row: 5 / 11; }
-  .center-flair-mid-right { grid-column: 3 / 3; grid-row: 5 / 11; }
-  .right-side-flair-top { grid-column: 4 / 4; grid-row: 1 / 5; }
-  .right-side-flair-mid { grid-column: 4 / 4; grid-row: 5 / 11; }
-  .auth-center {
-      grid-column: 2 / 4;
-      grid-row: 1 / 5;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "center-top center-top"
+      "left-top right-top"
+      "left-mid right-mid"
+      "center-left center-right"
+      "left-bot left-bot";
   }
 }
 
+/* Mobile-first stacking & centering */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "center-top"
+      "left-top"
+      "left-mid"
+      "left-bot"
+      "center-left"
+      "center-right"
+      "right-top"
+      "right-mid";
+    /* Allow grid rows to expand to fit content */
+    grid-auto-rows: 1fr;
+  }
+
+  .grid-container > div {
+    width: 100%;
+    min-height: 0;
+    min-height: 100%;
+    height: 100%;
+    align-items: stretch;
+    justify-content: stretch;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home {
+    padding-block: 20px;
+    height: 100%;
+  }
+
+  .login-wrap {
+    padding-inline: 16px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Very small devices */
+@media (max-width: 420px) {
+  .login-wrap > * {
+    width: 100%;
+  }
+}
 </style>
+

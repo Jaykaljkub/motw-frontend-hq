@@ -718,5 +718,29 @@ import {
 .glasser:hover::after {
     opacity: 1;
 }
+  @media (max-width: 768px) {
+    .acquisitionswidget {
+      max-width: 100% !important;
+      max-height: unset !important;
+      width: 100% !important;
+    }
+    .acquisitionswidget svg {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+    .mid-display,
+    .bottom-icons {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+    }
+    .glasser {
+      max-width: 100% !important;
+      width: 100% !important;
+    }
+  }
+
   </style>
   

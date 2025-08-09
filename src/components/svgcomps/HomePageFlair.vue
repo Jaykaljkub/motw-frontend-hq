@@ -752,4 +752,28 @@ display: block;
 .glasser:hover::after {
     opacity: 1;
 }
+@media (max-width: 768px) {
+  .homepageflair {
+    max-width: unset !important;
+    max-height: unset !important;
+    width: 100% !important;
+  }
+  .homepageflair svg {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+  }
+  .mid-graphic,
+  .bottom-chart {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  .glasser {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
 </style>
