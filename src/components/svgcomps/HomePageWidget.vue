@@ -62,12 +62,34 @@
       .ringPropagationSpeed('propagationSpeed')
       .ringRepeatPeriod('repeatPeriod');
   
+    // Configure controls based on screen size
+    const isMobile = window.innerWidth <= 768;
+    
     myGlobe.controls().autoRotate = true;
     myGlobe.controls().autoRotateSpeed = 0.5;
+    
+    if (isMobile) {
+      // Disable all user interactions on mobile
+      myGlobe.controls().enableZoom = false;
+      myGlobe.controls().enablePan = false;
+      myGlobe.controls().enableRotate = false;
+    }
   
     const fitToParent = () => {
       const { width, height } = globeWrap.value.getBoundingClientRect();
       myGlobe.width(width).height(height);
+      
+      // Update controls based on current screen size
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        myGlobe.controls().enableZoom = false;
+        myGlobe.controls().enablePan = false;
+        myGlobe.controls().enableRotate = false;
+      } else {
+        myGlobe.controls().enableZoom = true;
+        myGlobe.controls().enablePan = true;
+        myGlobe.controls().enableRotate = true;
+      }
     };
   
     resizeObs = new ResizeObserver(fitToParent);
@@ -141,6 +163,7 @@
       left: 0 !important;
       top: 0 !important;
     }
+
   }
   @media (max-width: 480px) {
     .midnight-message {

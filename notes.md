@@ -1,3 +1,5 @@
+
+
 Hero Section:
      Background: A shadowy cityscape at midnight, a hidden surveillance room, or a cryptic symbol.
      Headline (Big & Bold):
@@ -199,3 +201,9 @@ Could include "Unidentified Objects" or "Lost Relics of Unknown Origin."
 - Make sure it is properly called ie <Component></Component>
 - Make sure the name is properly matched
 - Register the classname of the component in config
+
+## Notes on uploading to VPS
+
+- Go to file folder
+- Upload contents of dist/ to /home/dh_9qrwdh/midnightwatch.org 
+- and the assets and dataset to /home/dh_9qrwdh/midnightwatch.org/motw-frontend-hq
